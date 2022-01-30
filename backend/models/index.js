@@ -21,19 +21,20 @@ db.comment = require("./comment")(sequelize, Sequelize);
 db.like = require("./like")(sequelize, Sequelize);
 
 // Associations des modèles
-db.user.hasMany(db.post, { onDelete: "CASCADE", onUpdate: "CASCADE"});
+db.user.hasMany(db.post, { foreignKey: "userId", onDelete: "CASCADE", onUpdate: "CASCADE"});
 db.post.belongsTo(db.user, { foreignKey: "userId", onDelete: "CASCADE", onUpdate: "CASCADE"});
 
-db.post.hasMany(db.comment, { onDelete: "CASCADE", onUpdate: "CASCADE"});
+db.post.hasMany(db.comment, { foreignKey: "postId", onDelete: "CASCADE", onUpdate: "CASCADE"});
 db.comment.belongsTo(db.post, { foreignKey: "postId", onDelete: "CASCADE", onUpdate: "CASCADE"});
 
-db.user.hasMany(db.comment, { onDelete: "CASCADE", onUpdate: "CASCADE"});
+db.user.hasMany(db.comment, { foreignKey: "userId", onDelete: "CASCADE", onUpdate: "CASCADE"});
 db.comment.belongsTo(db.user, { foreignKey: "userId", onDelete: "CASCADE", onUpdate: "CASCADE"});
 
-db.user.hasMany(db.like, { onDelete: "CASCADE", onUpdate: "CASCADE"});
+db.user.hasMany(db.like, { foreignKey: "userId", onDelete: "CASCADE", onUpdate: "CASCADE"});
 db.like.belongsTo(db.user, { foreignKey: "userId", onDelete: "CASCADE", onUpdate: "CASCADE"});
 
-db.post.hasMany(db.like, { onDelete: "CASCADE", onUpdate: "CASCADE"});
+db.post.hasMany(db.like, { foreignKey: "postId", onDelete: "CASCADE", onUpdate: "CASCADE"});
 db.like.belongsTo(db.post, { foreignKey: "postId", onDelete: "CASCADE", onUpdate: "CASCADE"});
+
 
 module.exports = db;
