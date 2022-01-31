@@ -1,6 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const db = require("./config/db.config");
+const path = require("path");
+
+// Importation des routes
+const userRoutes = require("./routes/user");
+const postRoutes = require("./routes/post");
+const commentRoutes = require("./routes/comment");
+const likeRoutes = require("./routes/like");
+
 
 const app = express();
 
@@ -17,8 +25,15 @@ db.sync()
 const models = require("./models");
 models.sequelize.sync({ alter: true})
 
-app.get("/", (req, res) => {
-    res.json({ message: "Welcome to your application." });
-  });
+
+// Traitement des requêtes pour les images
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
+// EndPoints
+app.use('/api/users', userRoutes);
+app.use('/api/posts', postRoutes);
+app.use('/api/posts', commentRoutes);
+app.use('/api/posts', likeRoutes);
+
 
 module.exports = app;
