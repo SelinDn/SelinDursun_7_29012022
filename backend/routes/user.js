@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
-//const passwordValidator = require();
-//const auth = require();
-//const multer = require();
+const passwordValidator = require("../middleware/password-validator");
+const auth = require("../middleware/auth");
+const multer = require("../middleware/multer-config");
 const userCtrl = require("../controllers/user");
 
 router.post('/signup', passwordValidator, userCtrl.signup);
