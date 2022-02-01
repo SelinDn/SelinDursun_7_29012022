@@ -4,6 +4,7 @@ const cryptoJs = require('crypto-js');
 require('dotenv/config');
 const db = require("../models/index");
 const User = db.user;
+const fs = require("fs");
 
 // Mise en place de RegExp
 const emailRegexp = /^[^ "<>?*()$][a-zA-Z0-9ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ ,.'-_]+[@]{1}[^ "<>?*()$][a-zA-Z0-9ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËèéêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ ,.'-_]+[.]{1}[a-z]{2,20}$/;
@@ -82,15 +83,54 @@ exports.login = (req, res, next) => {
 
 // Retrouver un utilisateur
 exports.getOneUser = (req, res, next) => {
-
+    User.findOne({ where: { id: req.params.id} })
+    .then(user => res.status(200).json(user))
+    .catch(error => res.status(404).json({ error}));
 };
 
 // Modification 
 exports.modifyUser = (req, res, next) => {
-
+    // Contrôle de l'authentification
+    User.findOne({where: {id: req.params.id} })
+    .then(() => {
+        if (user.id !== req.auth.userId  || user.isAdmin !== true) {
+            return res.status(403).json({
+                error: new Error('Requête non autorisée !')
+            }); 
+        }
+        // Dans le cas de l'ajout d'une nouvelle image
+        const user = req.file ? 
+        {
+            ...JSON.parse(req.body),
+            imageURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        } : { ...req.body }; 
+        // Contrôle des champs de saisies
+        if (!regExp.test(req.body.pseudo)) {
+            return res.status(500).json({ message : 'Les caractères spéciaux ne sont pas autorisés, veillez à bien remplir les champs'})
+        }
+        User.update({ where: { id: req.params.id} }), ( user, { where: { id: req.params.id} })
+        .then(() => res.status(200).json({message: 'Votre profil a bien été modifié !'}))
+        .catch(error => res.status(400).json({ error}));
+    })
+    .catch(error => res.status(500).json({ error}));
 };
 
 // Suppression 
 exports.deleteUser = (req, res, next) => {
-
+    User.findOne({where: {id: req.params.id} })
+    .then((user) => {
+        if (user.id !== req.auth.userId  || user.isAdmin !== true) {
+            return res.status(403).json({
+                error: new Error('Requête non autorisée !')
+            }); 
+        }
+        // Chercher l'image afin de la supprimer aussi du dossier images et de la db
+        const filename = sauce.imageUrl.split('/images/')[1];
+        fs.unlink(`images/${filename}`, () => {
+            User.destroy({ where: { id: req.params.id} })
+            .then(() => res.status(200).json({ message: 'Votre compte a bien été supprimé !'}))
+            .catch(error => res.status(400).json({error}))
+        });
+    })
+    .catch(error => res.status(500).json({ error}));
 };
