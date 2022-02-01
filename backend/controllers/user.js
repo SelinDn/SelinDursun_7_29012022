@@ -98,19 +98,32 @@ exports.modifyUser = (req, res, next) => {
                 error: new Error('Requête non autorisée !')
             }); 
         }
-        // Dans le cas de l'ajout d'une nouvelle image
-        const user = req.file ? 
-        {
-            ...JSON.parse(req.body),
-            imageURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-        } : { ...req.body }; 
-        // Contrôle des champs de saisies
-        if (!regExp.test(req.body.pseudo)) {
-            return res.status(500).json({ message : 'Les caractères spéciaux ne sont pas autorisés, veillez à bien remplir les champs'})
+        else if (user.imageURL !== null || user.imageURL !==undefined) {
+            const filename = user.imageURL.split('/images/')[1];
+            fs.unlink(`images/${filename}`, () => {
+                User.destroy({ imageURL: req.body.imageURL }, { where: { id: req.params.id} })
+                .then(() => res.status(200).json({ message: 'Profil modifié !'}))
+                .catch(error => res.status(400).json({error}))
+            });
         }
-        User.update({ where: { id: req.params.id} }), ( user, { where: { id: req.params.id} })
-        .then(() => res.status(200).json({message: 'Votre profil a bien été modifié !'}))
-        .catch(error => res.status(400).json({ error}));
+        else {
+            // Dans le cas de l'ajout d'une nouvelle image
+            const user = req.file ? 
+            {
+                ...JSON.parse(req.body),
+                imageURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+            } : { ...req.body }; 
+            // Contrôle des champs de saisies
+            if (!regExp.test(req.body.pseudo)) {
+                return res.status(500).json({ message : 'Les caractères spéciaux ne sont pas autorisés, veillez à bien remplir les champs'})
+            }
+            else if (!req.body.pseudo) {
+                return res.status(400).json({ message: "Veuillez ne pas laisser les champs vides !"})
+            }
+            User.update({ where: { id: req.params.id} }), ( user, { where: { id: req.params.id} })
+            .then(() => res.status(200).json({message: 'Votre profil a bien été modifié !'}))
+            .catch(error => res.status(400).json({ error}));
+        }
     })
     .catch(error => res.status(500).json({ error}));
 };
@@ -125,7 +138,7 @@ exports.deleteUser = (req, res, next) => {
             }); 
         }
         // Chercher l'image afin de la supprimer aussi du dossier images et de la db
-        const filename = sauce.imageUrl.split('/images/')[1];
+        const filename = user.imageURL.split('/images/')[1];
         fs.unlink(`images/${filename}`, () => {
             User.destroy({ where: { id: req.params.id} })
             .then(() => res.status(200).json({ message: 'Votre compte a bien été supprimé !'}))
