@@ -31,6 +31,7 @@ exports.createPost = (req, res, next) => {
     }
     const post = {
         ...postObject,
+        userId : req.body.userId,
         // Récupérer tout les segments d'URL de l'image
         attachment : `${req.protocol}://${req.get('host')}/images/${req.file.filename}` 
     };
@@ -61,7 +62,7 @@ exports.modifyPost = (req, res, next) => {
             {
                 ...JSON.parse(req.body),
                 attachment: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-            } : { ...req.body }; 
+            } : { ...req.body, userId : req.body.userId }; 
             // Contrôle des champs de saisies
             if (!regExp.test(req.body.content)) {
                 return res.status(500).json({ message : 'Les caractères spéciaux ne sont pas autorisés, veillez à bien remplir les champs'})
