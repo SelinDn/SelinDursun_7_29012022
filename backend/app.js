@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const db = require("./config/db.config");
 const path = require("path");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const xss = require("xss-clean");
 
 // Importation des routes
 const userRoutes = require("./routes/user");
@@ -11,6 +14,11 @@ const likeRoutes = require("./routes/like");
 
 
 const app = express();
+
+// Securité
+app.use(helmet());
+app.use(morgan('combined'));
+app.use(xss());
 
 app.use(express.json());
 app.use(cors());
