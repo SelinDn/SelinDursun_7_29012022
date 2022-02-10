@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import LogInForm from "./LogInForm";
 import RegisterForm from "./RegisterForm";
 
+// Création du component Log pour paramétrer les modals d'authentification
+
 function Log(props) {
     const [registerModal, setRegisterModal] = useState(props.register);
     const [logInModal, setLogInModal] = useState(props.login);

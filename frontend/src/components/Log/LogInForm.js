@@ -1,14 +1,21 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+/**
+ * Création du component LogInForm,
+ * Stockage avec les hooks (useState),
+ * Logique (handleLogin),
+ * Requête avec axios à la db,
+ * Puis affichage en jsx.
+ */
+
 function LogInForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
     const handleLogin = (e) => {
         e.preventDefault();
-        const emailError = document.querySelector(".email-error");
-        const passwordError = document.querySelector(".password-error");
+        const msg = document.querySelector(".msg");
 
         axios({
             method: "post",
@@ -20,22 +27,20 @@ function LogInForm() {
             },
         })
         .then((res) => {
-            if (res.data.errors) {
-                emailError.innerHTML = res.data.errors.email;
-                passwordError.innerHTML = res.data.errors.password;
+            console.log(res)
+            if (res.status === 401) {
+                msg.innerHTML = "Email ou mot de passe incorrect"
             }
             else {
                 localStorage.setItem("Token", res.data.token);
                 window.location = "/home";
             }
         })
-        .catch((error) => {
-            console.log(error);
-        });
+        .catch((error) => console.log(error));
     }
     
     return (
-        <form action="" onSubmit={handleLogin} id="login-form">
+        <form action="" onSubmit={handleLogin} id="log-form">
             <label htmlFor="email">Email</label>
             <br />
             <input 
@@ -46,7 +51,6 @@ function LogInForm() {
                 value={email} 
                 required
             />
-            <div className="email-error"></div>
             <br />
             <label htmlFor="password">Mot de passe</label>
             <br />
@@ -58,7 +62,7 @@ function LogInForm() {
                 value={password} 
                 required
             />
-            <div className="password-error"></div>
+            <p className="msg"></p>
             <br />
             <input type="submit" value="Se connecter" />
             <br />

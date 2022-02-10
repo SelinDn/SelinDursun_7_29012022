@@ -3,6 +3,8 @@ import Log from "../../components/Log";
 import Img from "../../img/icon-above-font.png";
 import "./Auth.css";
 
+// Page d'authentification
+
 function Auth() {
     return (
         <div>
