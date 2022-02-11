@@ -40,7 +40,7 @@ function LogInForm() {
     }
     
     return (
-        <form action="" onSubmit={handleLogin} id="log-form">
+        <form action="" onSubmit={handleLogin} id="log-form" className="form">
             <label htmlFor="email">Email</label>
             <br />
             <input 
@@ -64,7 +64,7 @@ function LogInForm() {
             />
             <p className="msg"></p>
             <br />
-            <input type="submit" value="Se connecter" />
+            <input type="submit" value="Se connecter" className="btn-form"/>
             <br />
             <p>Mot de passe oublié ? Contactez-nous à l'adresse <br/>
                 <strong>helpaccount@groupomania.com</strong>

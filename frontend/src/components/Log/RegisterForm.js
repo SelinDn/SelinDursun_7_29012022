@@ -39,7 +39,7 @@ function RegisterForm() {
     }
 
     return (
-        <form action="" onSubmit={handleRegister} id="log-form">
+        <form action="" onSubmit={handleRegister} id="log-form" className="form">
             <label htmlFor="pseudo">Pseudo</label>
             <br />
             <input 
@@ -74,7 +74,7 @@ function RegisterForm() {
             />
             <p className="msg"></p>
             <br />
-            <input type="submit" value="Je m'inscris" />
+            <input type="submit" value="Je m'inscris" className="btn-form" />
         </form>
     );
 };

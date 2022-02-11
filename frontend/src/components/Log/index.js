@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import LogInForm from "./LogInForm";
 import RegisterForm from "./RegisterForm";
+import "../../pages/Auth/Auth.css";
 
 // Création du component Log pour paramétrer les modals d'authentification
 
