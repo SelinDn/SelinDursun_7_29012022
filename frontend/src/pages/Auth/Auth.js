@@ -12,7 +12,6 @@ function Auth() {
             <div className="img-container">
                 <img src={Img} alt="Logo de l'entreprise" />
             </div>
-            <h1 className="auth-title">Bienvenue chez Groupomania</h1>
             <p className="auth-description">Inscrivez-vous dès à présent et rejoignez vos collègues</p>
         </section>
     );

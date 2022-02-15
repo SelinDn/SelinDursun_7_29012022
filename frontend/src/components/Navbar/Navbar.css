@@ -1,0 +1,33 @@
+.nav-container {
+    width: 100%;
+    height: 80px;
+    background-color: #F76242;
+    box-shadow: 2px 2px 5px lightcoral;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    height: 5.3rem;
+}
+
+.nav-img {
+    height: 10rem;
+    padding: 0 1rem;
+}
+
+ul {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    width: 35%;
+    list-style-type: none;
+}
+
+.nav-profil, .nav-logout {
+    cursor: pointer;
+}
