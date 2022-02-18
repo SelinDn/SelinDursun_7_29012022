@@ -19,6 +19,11 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: true,
         },
+        like: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: 0, 
+        },
     });
     return Post;
 };

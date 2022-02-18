@@ -40,3 +40,19 @@
 .post-img img {
     width: 100%;
 }
+
+.post-engagement {
+    flex: 20%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.post-engagement #like-btn {
+    font-size: 2.5rem;
+    color: gray;
+    cursor: pointer;
+}
+
+.post-engagement #like-btn:active {
+    color: #2976D0;
+}

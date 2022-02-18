@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import Upload from "../../components/Post/Upload";
+import ThumbUpIcon from '@material-ui/icons/ThumbUp';
+import "../Home/Home.css";
 
 function Home() {
     const [posts, setPosts] = useState([]);
@@ -25,6 +27,26 @@ function Home() {
             <Upload />
             <h1 className="home-title">Récentes publications</h1>
             {posts.map((post) => {
+
+                const likePost = () => {
+                    const token = localStorage.getItem("Token")
+                    axios({
+                        method: "post",
+                        url: `http://localhost:3001/api/posts/${post.id}`,
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                        data: {
+                            postId: post.id,
+                            userId: token.userId,
+                        },
+                    })
+                    .then((res) => {
+                        setPosts(res.data);
+                    })
+                    .catch((error) => console.log(error));
+                }
+
                 return (
                     <div className="post" key={post.id}>
                         <div className="post-content">
@@ -40,6 +62,13 @@ function Home() {
                         </div>
                         <div className="post-img">
                             {post.attachment && <img src={post.attachment} alt="" />}
+                        </div>
+                        <div className="post-engagement">
+                            <ThumbUpIcon 
+                                id="like-btn" 
+                                onClick={likePost} 
+                            />
+                            Aimé par {post.like} personnes
                         </div>
                     </div>
                 )
