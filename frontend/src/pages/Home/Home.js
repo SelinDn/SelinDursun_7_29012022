@@ -4,6 +4,7 @@ import Upload from "../../components/Post/Upload";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import CommentIcon from '@material-ui/icons/Comment';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
+import DeleteIcon from '@material-ui/icons/Delete';
 import "../Home/Home.css";
 
 function Home() {
@@ -38,7 +39,7 @@ function Home() {
                  * Logique likePost,
                  * handleSubmitComment pour création de commentaires,
                  * getComments pour récupération de tout les commentaires,
-                 * updatePost pour la modification d'un post,
+                 * updatePost pour la modification d'un post et deletePost pour la suppression,
                  * (Tous rattachés au useEffect de getAllPosts).
                  */
                 const likePost = () => {
@@ -101,7 +102,7 @@ function Home() {
                 const updatePost = () => {
                     const token = localStorage.getItem("Token");
                     const isAdmin = localStorage.getItem("Token").isAdmin;
-                    if (editPost && (post.userId === token.userId || isAdmin)) {
+                    if (editPost && (post.userId === token.userId || isAdmin === true)) {
                         axios({
                             method: "PUT",
                             url: `http://localhost:3001/api/posts/${post.id}`,
@@ -118,6 +119,24 @@ function Home() {
                             setPosts(res.data);
                             setEditPost(res.data);
                             setIsUpdated(false);
+                        })
+                        .catch((error) => console.log(error));
+                    }
+                };
+
+                const deletePost = () => {
+                    const token = localStorage.getItem("Token");
+                    const isAdmin = localStorage.getItem("Token").isAdmin;
+                    if (post.userId === token.userId || isAdmin === true) {
+                        axios({
+                            method: "DELETE",
+                            url: `http://localhost:3001/api/posts/${post.id}`,
+                            headers: {
+                                Authorization: `Bearer ${token}` ,
+                            },
+                        })
+                        .then((res) => {
+                            setPosts(res.data);
                         })
                         .catch((error) => console.log(error));
                     }
@@ -166,6 +185,10 @@ function Home() {
                                 id="modify-btn"
                                 onClick={() => setIsUpdated(!isUpdated)}
                             />
+                            <DeleteIcon 
+                                id="delete-btn" 
+                                onClick={deletePost} 
+                            />
                         </div>
                         <form className="comment-form" action="" onSubmit={handleSubmitComment}>
                             <input 
@@ -180,8 +203,33 @@ function Home() {
                             <input type="submit" value="Publier" className="btn-comment" />
                         </form>
                         {comments.map((comment) => {
+
+                            /**
+                             * (Dépendant du .map comments)
+                             * deleteComment pour la suppression d'un commentaire,
+                             * updateComment (à venir ...)
+                             * (Tous rattachés au useEffect de getAllPosts).
+                             */
+                            const deleteComment = () => {
+                                const token = localStorage.getItem("Token");
+                                const isAdmin = localStorage.getItem("Token").isAdmin;
+                                if (comment.userId === token.userId || isAdmin === true) {
+                                    axios({
+                                        method:"DELETE",
+                                        url: `http://localhost:3001/api/posts/${post.id}/comments/${comment.id}`,
+                                        headers: {
+                                            Authorization: `Bearer ${token}`,
+                                        },
+                                    })
+                                    .then((res) => {
+                                        setPosts(res.data);
+                                    })
+                                    .catch((error) => console.log(error));
+                                }
+                            };
+
                             return (
-                                <div className="comments-container" key={post.id}>
+                                <div className="comments-container" key={comment.id}>
                                     <div className="post-comments">
                                         <div className="post-comments-header">
                                             Posté par {comment.userId}
@@ -192,6 +240,12 @@ function Home() {
                                     </div>
                                     <div className="post-comments-content">
                                         {comment.content}
+                                    </div>
+                                    <div className="post-comments-options">
+                                        <DeleteIcon 
+                                            id="delete-btn" 
+                                            onClick={deleteComment} 
+                                        />
                                     </div>
                                 </div>
                             )
