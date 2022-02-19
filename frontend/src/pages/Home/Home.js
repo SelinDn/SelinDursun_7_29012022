@@ -3,13 +3,16 @@ import React, { useEffect, useState } from "react";
 import Upload from "../../components/Post/Upload";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import CommentIcon from '@material-ui/icons/Comment';
+import BorderColorIcon from '@material-ui/icons/BorderColor';
 import "../Home/Home.css";
 
 function Home() {
     const [posts, setPosts] = useState([]);
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([]);
-    
+    const [isUpdated, setIsUpdated] = useState(false);
+    const [editPost, setEditPost] = useState("");
+
     useEffect(() => {
         const token = localStorage.getItem("Token")
         axios({
@@ -35,6 +38,7 @@ function Home() {
                  * Logique likePost,
                  * handleSubmitComment pour création de commentaires,
                  * getComments pour récupération de tout les commentaires,
+                 * updatePost pour la modification d'un post,
                  * (Tous rattachés au useEffect de getAllPosts).
                  */
                 const likePost = () => {
@@ -94,6 +98,31 @@ function Home() {
                     .catch((error) => console.log(error));
                 };
 
+                const updatePost = () => {
+                    const token = localStorage.getItem("Token");
+                    const isAdmin = localStorage.getItem("Token").isAdmin;
+                    if (editPost && (post.userId === token.userId || isAdmin)) {
+                        axios({
+                            method: "PUT",
+                            url: `http://localhost:3001/api/posts/${post.id}`,
+                            headers: {
+                                Authorization: `Bearer ${token}` ,
+                            },
+                            data: {
+                                content: editPost,
+                                postId: post.id,
+                                userId: token.userId,
+                            },
+                        })
+                        .then((res) => {
+                            setPosts(res.data);
+                            setEditPost(res.data);
+                            setIsUpdated(false);
+                        })
+                        .catch((error) => console.log(error));
+                    }
+                };
+
                 return (
                     <div className="post" key={post.id}>
                         <div className="post-content">
@@ -105,10 +134,23 @@ function Home() {
                             </div>
                         </div>
                         <div className="post-content-content">
-                            {post.content}
+                        {isUpdated === false && <p>{post.content}</p>}
+                            {isUpdated && (
+                                <div className="post-edit-content">
+                                    <input 
+                                        type="textarea" 
+                                        defaultValue={post.content}
+                                        onChange={(e) => setEditPost(e.target.value)}
+                                    />
+                                    <br />
+                                    <button className="edit-btn" onClick={updatePost}>
+                                        Valider la modification
+                                    </button>
+                                </div>
+                           )}
                         </div>
                         <div className="post-img">
-                            {post.attachment && <img src={post.attachment} alt="" />}
+                           {post.attachment && <img src={post.attachment} alt="" />}
                         </div>
                         <div className="post-engagement">
                             <ThumbUpIcon 
@@ -119,6 +161,10 @@ function Home() {
                             <CommentIcon 
                                 id="comment-btn" 
                                 onClick={getComments} 
+                            />
+                            <BorderColorIcon 
+                                id="modify-btn"
+                                onClick={() => setIsUpdated(!isUpdated)}
                             />
                         </div>
                         <form className="comment-form" action="" onSubmit={handleSubmitComment}>
