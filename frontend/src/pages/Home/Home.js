@@ -1,11 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import {Link} from "react-router-dom";
 import Upload from "../../components/Post/Upload";
 import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import CommentIcon from '@material-ui/icons/Comment';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import DeleteIcon from '@material-ui/icons/Delete';
 import "../Home/Home.css";
+import Img from "../../img/icon.png";
 
 function Home() {
     const [posts, setPosts] = useState([]);
@@ -147,8 +149,17 @@ function Home() {
                 return (
                     <div className="post" key={post.id}>
                         <div className="post-content">
+                            <div className="post-content-profil-img">
+                                {post.User.imageURL === null ? (
+                                    <img className="post-profil-img" src={Img} alt="Logo Groupomania" />
+                                ) : (
+                                    <img className="post-profil-img" src={post.User.imageURL} alt="Avatar" />
+                                )}
+                            </div>
                             <div className="post-content-header">
-                                Posté par {post.userId} 
+                                <Link to={`/profil/${post.User.id}`}>
+                                    Posté par {post.userId} 
+                                </Link>
                             </div> 
                             <div className="post-content-date">
                                 {new Date(post.createdAt).toLocaleDateString("fr-FR")}
@@ -258,8 +269,17 @@ function Home() {
                             return (
                                 <div className="comments-container" key={comment.id}>
                                     <div className="post-comments">
+                                        <div className="post-content-profil-img">
+                                            {comment.User.imageURL === null ? (
+                                                <img className="post-profil-img" src={Img} alt="Logo Groupomania" />
+                                            ) : (
+                                                <img className="post-profil-img" src={comment.User.imageURL} alt="Avatar" />
+                                            )}
+                                        </div>
                                         <div className="post-comments-header">
-                                            Posté par {comment.userId}
+                                            <Link to={`/profil/${comment.User.id}`}>
+                                                Posté par {comment.userId}
+                                            </Link>
                                         </div>
                                         <div className="post-comments-date">
                                             {new Date(comment.createdAt).toLocaleDateString("fr-FR")}
