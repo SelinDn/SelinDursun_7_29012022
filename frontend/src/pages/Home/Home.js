@@ -13,6 +13,8 @@ function Home() {
     const [comments, setComments] = useState([]);
     const [isUpdated, setIsUpdated] = useState(false);
     const [editPost, setEditPost] = useState("");
+    const [updateComment, setUpdateComment] = useState(false);
+    const [editComment, setEditComment] = useState("");
 
     useEffect(() => {
         const token = localStorage.getItem("Token")
@@ -207,9 +209,34 @@ function Home() {
                             /**
                              * (Dépendant du .map comments)
                              * deleteComment pour la suppression d'un commentaire,
-                             * updateComment (à venir ...)
+                             * modifyComment pour la modification d'un commentaire,
                              * (Tous rattachés au useEffect de getAllPosts).
                              */
+                            const modifyComment = () => {
+                                const token = localStorage.getItem("Token");
+                                const isAdmin = localStorage.getItem("Token").isAdmin;
+                                if (editComment && (comment.userId === token.userId || isAdmin === true)) {
+                                    axios({
+                                        method: "PUT",
+                                        url: `http://localhost:3001/api/posts/${post.id}/comments/${comment.id}`,
+                                        headers: {
+                                            Authorization: `Bearer ${token}` ,
+                                        },
+                                        data: {
+                                            content: editComment,
+                                            postId: post.id,
+                                            userId: token.userId,
+                                        },
+                                    })
+                                    .then((res) => {
+                                        setPosts(res.data);
+                                        setEditComment(res.data);
+                                        setUpdateComment(false);
+                                    })
+                                    .catch((error) => console.log(error));
+                                }
+                            };
+
                             const deleteComment = () => {
                                 const token = localStorage.getItem("Token");
                                 const isAdmin = localStorage.getItem("Token").isAdmin;
@@ -239,9 +266,26 @@ function Home() {
                                         </div>
                                     </div>
                                     <div className="post-comments-content">
-                                        {comment.content}
+                                        {updateComment === false && <p>{comment.content}</p>}
+                                        {updateComment && (
+                                            <div className="comment-edit-content">
+                                                <input 
+                                                    type="textarea" 
+                                                    defaultValue={comment.content}
+                                                    onChange={(e) => setEditComment(e.target.value)}
+                                                />
+                                                <br />
+                                                <button className="edit-btn" onClick={modifyComment}>
+                                                    Valider la modification
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="post-comments-options">
+                                        <BorderColorIcon 
+                                            id="modify-btn"
+                                            onClick={() => setUpdateComment(!updateComment)}
+                                        />
                                         <DeleteIcon 
                                             id="delete-btn" 
                                             onClick={deleteComment} 
