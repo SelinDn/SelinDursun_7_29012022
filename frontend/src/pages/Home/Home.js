@@ -150,7 +150,7 @@ function Home() {
                     <div className="post" key={post.id}>
                         <div className="post-content">
                             <div className="post-content-profil-img">
-                                {post.User.imageURL === null ? (
+                                {post.User.imageURL === undefined ? (
                                     <img className="post-profil-img" src={Img} alt="Logo Groupomania" />
                                 ) : (
                                     <img className="post-profil-img" src={post.User.imageURL} alt="Avatar" />
