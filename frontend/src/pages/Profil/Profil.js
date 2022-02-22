@@ -7,6 +7,7 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import CommentIcon from '@material-ui/icons/Comment';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import DeleteIcon from '@material-ui/icons/Delete';
+import "../Profil/Profil.css";
 
 function Profil() {
     const {id} = useParams();
