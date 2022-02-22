@@ -34,7 +34,7 @@ exports.signup = (req, res, next) => {
             pseudo: req.body.pseudo,
         };
 
-        User.save(user)
+        User.create(user)
         .then(() => res.status(201).json({ message : 'Utilisateur créé !'}))
         .catch( error => res.status(400).json({ error }));
     })

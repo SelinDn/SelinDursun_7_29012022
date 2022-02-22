@@ -20,7 +20,6 @@ function LogInForm() {
         axios({
             method: "post",
             url: "http://localhost:3001/api/users/login",
-            withCredentials: true,
             data: {
                 email,
                 password,

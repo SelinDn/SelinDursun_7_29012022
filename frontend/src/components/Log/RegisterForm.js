@@ -19,7 +19,7 @@ function RegisterForm() {
         const msg = document.querySelector(".msg");
 
         axios({
-            method: "post",
+            method: "POST",
             url: "http://localhost:3001/api/users/signup",
             data: {
                 email,
