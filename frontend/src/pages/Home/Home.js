@@ -150,7 +150,7 @@ function Home() {
                     <div className="post" key={post.id}>
                         <div className="post-content">
                             <div className="post-content-profil-img">
-                                {post.User.imageURL === undefined ? (
+                                {post.userId.imageURL === undefined ? (
                                     <img className="post-profil-img" src={Img} alt="Logo Groupomania" />
                                 ) : (
                                     <img className="post-profil-img" src={post.User.imageURL} alt="Avatar" />
@@ -158,11 +158,11 @@ function Home() {
                             </div>
                             <div className="post-content-header">
                                 <Link to={`/profil/${post.User.id}`}>
-                                    Posté par {post.userId} 
+                                    Posté par {post.User.pseudo} 
                                 </Link>
                             </div> 
                             <div className="post-content-date">
-                                {new Date(post.createdAt).toLocaleDateString("fr-FR")}
+                               le {new Date(post.createdAt).toLocaleDateString("fr-FR")}
                             </div>
                         </div>
                         <div className="post-content-content">
@@ -189,7 +189,7 @@ function Home() {
                                 id="like-btn" 
                                 onClick={likePost} 
                             />
-                            Aimé par {post.like.length} personnes
+                            Aimé par {post.like} personnes
                             <CommentIcon 
                                 id="comment-btn" 
                                 onClick={getComments} 

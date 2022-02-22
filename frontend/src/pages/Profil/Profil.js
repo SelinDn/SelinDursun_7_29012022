@@ -115,7 +115,7 @@ function Profil() {
             <div className="profil-info-container">
                 <h1 className="profil-title">Profil de {user.pseudo}</h1>
                 {isUpdated === false && <div className="profil-avatar-container">
-                    {user.imageURL === undefined ? (
+                    {user.imageURL === null ? (
                         <img className="profil-img" src={Img} alt="Logo Groupomania" />  
                     ) : (
                         <img className="profil-img" src={user.imageURL} alt="avatar" /> 
@@ -258,19 +258,19 @@ function Profil() {
                     <div className="post" key={post.id}>
                         <div className="post-content">
                             <div className="post-content-profil-img">
-                                {post.User.imageURL === undefined ? (
+                                {post.imageURL === undefined ? (
                                     <img className="post-profil-img" src={Img} alt="Logo Groupomania" />
                                 ) : (
-                                    <img className="post-profil-img" src={post.User.imageURL} alt="Avatar" />
+                                    <img className="post-profil-img" src={post.imageURL} alt="Avatar" />
                                 )}
                             </div>
                             <div className="post-content-header">
                                 <Link to={`/profil/${post.User.id}`}>
-                                    Posté par {post.userId} 
+                                    Posté par {post.User.pseudo} 
                                 </Link>
                             </div> 
                             <div className="post-content-date">
-                                {new Date(post.createdAt).toLocaleDateString("fr-FR")}
+                                le {new Date(post.createdAt).toLocaleDateString("fr-FR")}
                             </div>
                         </div>
                         <div className="post-content-content">
@@ -297,7 +297,7 @@ function Profil() {
                                 id="like-btn" 
                                 onClick={likePost} 
                             />
-                            Aimé par {post.like.length} personnes
+                            Aimé par {post.like} personnes
                             <CommentIcon 
                                 id="comment-btn" 
                                 onClick={getComments} 

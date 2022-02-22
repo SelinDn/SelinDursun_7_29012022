@@ -22,19 +22,22 @@ const regExp = /^[^ "<>?*()$][a-zA-Z0-9ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòó�
 // Création
 exports.createPost = (req, res, next) => {
     // Passage String => JS Object pour pouvoir créer la sauce
-    const postObject = JSON.parse(req.body);
     if (!regExp.test(req.body.content)) {
         return res.status(500).json({ message : 'Les caractères spéciaux ne sont pas autorisés, veillez à bien remplir les champs'})
     }
     else if (!req.body.content) {
         return res.status(400).json({ message: "Veuillez ne pas laisser les champs vides !"})
     }
-    const post = {
-        ...postObject,
-        userId : req.body.userId,
-        // Récupérer tout les segments d'URL de l'image
-        attachment : `${req.protocol}://${req.get('host')}/images/${req.file.filename}` 
-    };
+    const post = req.file ? {
+        ...req.body,
+        attachment : `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
+        like: 0,
+        userId: req.auth.userId,
+    } : {
+        ...req.body,
+        like:0,
+        userId: req.auth.userId,
+    }
     Post.create(post)
     .then(() => res.status(201).json({ message: 'Post enregistré et ajouté !'}))
     .catch(error => res.status(400).json({ error}));
