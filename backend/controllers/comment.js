@@ -7,7 +7,6 @@ const regExp = /^[^ "<>?*()$][a-zA-Z0-9ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòó�
 
 // Création 
 exports.createComment = (req, res, next) => {
-    const commentObject = JSON.parse(req.body);
     if (!regExp.test(req.body.content)) {
         return res.status(500).json({ message : 'Les caractères spéciaux ne sont pas autorisés, veillez à bien remplir les champs'})
     }
@@ -15,8 +14,8 @@ exports.createComment = (req, res, next) => {
         return res.status(400).json({ message: "Veuillez ne pas laisser les champs vides !"})
     }
     const comment = {
-        ...commentObject,
-        userId : req.body.userId,
+        ...req.body,
+        userId : req.auth.userId,
         postId : req.body.postId
     };
     Comment.create(comment)

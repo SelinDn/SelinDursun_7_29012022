@@ -21,7 +21,6 @@ const regExp = /^[^ "<>?*()$][a-zA-Z0-9ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòó�
 
 // Création
 exports.createPost = (req, res, next) => {
-    // Passage String => JS Object pour pouvoir créer la sauce
     if (!regExp.test(req.body.content)) {
         return res.status(500).json({ message : 'Les caractères spéciaux ne sont pas autorisés, veillez à bien remplir les champs'})
     }

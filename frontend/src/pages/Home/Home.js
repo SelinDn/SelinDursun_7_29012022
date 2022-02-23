@@ -66,7 +66,8 @@ function Home() {
                     .catch((error) => console.log(error));
                 };
 
-                const handleSubmitComment = () => {
+                const handleSubmitComment = (e) => {
+                    e.preventDefault();
                     const token = localStorage.getItem("Token");
                     axios({
                         method: "post",
@@ -82,14 +83,13 @@ function Home() {
                     })
                     .then((res) => {
                         setPosts(res.data);
-                        window.location.reload();
                     })
                     .catch((error) => console.log(error));
                 };
 
-                const getComments = () => {
+                const getComments = async () => {
                     const token = localStorage.getItem("Token");
-                    axios({
+                    const fetch = await axios({
                         method: "get",
                         url: `http://localhost:3001/api/posts/${post.id}/comments`,
                         headers: {
@@ -97,12 +97,12 @@ function Home() {
                         },
                     })
                     .then((res) => {
-                        setPosts(res.data);
-                        setComments(res.data);
+                      //setPosts(res.data);
+                      setComments(fetch);
                     })
                     .catch((error) => console.log(error));
                 };
-
+                
                 const updatePost = () => {
                     const token = localStorage.getItem("Token");
                     const isAdmin = localStorage.getItem("Token").isAdmin;
