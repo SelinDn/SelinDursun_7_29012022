@@ -12,7 +12,7 @@ exports.getAllPosts = (req, res, next) => {
 
 // Récupération des posts d'un utilisateur
 exports.getPostsByUser = (req, res, next) => {
-    Post.findAll({ order: [['createdAt', 'DESC']], include: {model: User}, where: {id: req.params.id} })
+    Post.findAll({ order: [['createdAt', 'DESC']], include: {model: User}, where: {userId: req.params.id} })
     .then(posts => res.status(200).json(posts))
     .catch(error => res.status(400).json({ error}));
 };
