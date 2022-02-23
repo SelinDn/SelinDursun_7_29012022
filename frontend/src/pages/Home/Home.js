@@ -60,8 +60,8 @@ function Home() {
                         },
                     })
                     .then((res) => {
-                        setPosts(res.data);
-                        window.location.reload();
+                       // setPosts(res.data);
+                       window.location.reload();
                     })
                     .catch((error) => console.log(error));
                 };
