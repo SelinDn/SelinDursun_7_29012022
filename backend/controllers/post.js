@@ -100,21 +100,21 @@ exports.modifyPost = (req, res, next) => {
 exports.deletePost = (req, res, next) => {
     Post.findOne({where: {id: req.params.id} })
     .then((post) => {
-        if (post.userId !== req.auth.userId  || User.isAdmin !== true) {
+        /*if (post.userId !== req.auth.userId  || User.isAdmin !== true) {
             return res.status(403).json({
                 error: new Error('Requête non autorisée !')
             }); 
-        }
-        else if (post.attachment !== null || post.attachment !==undefined) {
+        }*/
+        /*else*/ if (post.attachment !== null /*|| post.attachment !==undefined*/) {
             const filename = post.attachment.split('/images/')[1];
             fs.unlink(`images/${filename}`, () => {
-                Post.destroy({ where: { id: req.params.id} })
+                post.destroy({ where: { id: req.params.id} })
                 .then(() => res.status(200).json({ message: 'Post supprimé !'}))
                 .catch(error => res.status(400).json({error}))
             });
         }
         else {
-            Post.destroy({ where: { id: req.params.id} })
+            post.destroy({ where: { id: req.params.id} })
             .then(() => res.status(200).json({ message: 'Post supprimé !'}))
             .catch(error => res.status(400).json({error}))
         }

@@ -105,7 +105,6 @@ function Home() {
                 
                 const updatePost = () => {
                     const token = localStorage.getItem("Token");
-                    const isAdmin = localStorage.getItem("Token").isAdmin;
                     if (editPost /*&& (post.userId === token.userId || isAdmin === true)*/) {
                         axios({
                             method: "PUT",
@@ -132,7 +131,7 @@ function Home() {
                 const deletePost = () => {
                     const token = localStorage.getItem("Token");
                     const isAdmin = localStorage.getItem("Token").isAdmin;
-                    if (post.userId === token.userId || isAdmin === true) {
+                    //if (post.userId === token.userId || isAdmin === true) {
                         axios({
                             method: "DELETE",
                             url: `http://localhost:3001/api/posts/${post.id}`,
@@ -141,10 +140,11 @@ function Home() {
                             },
                         })
                         .then((res) => {
-                            setPosts(res.data);
+                            //setPosts(res.data);
+                            window.location.reload();
                         })
                         .catch((error) => console.log(error));
-                    }
+                    //}
                 };
 
                 return (
@@ -195,14 +195,18 @@ function Home() {
                                 id="comment-btn" 
                                 onClick={getComments} 
                             />
-                            <BorderColorIcon 
-                                id="modify-btn"
-                                onClick={() => setIsUpdated(!isUpdated)}
-                            />
-                            <DeleteIcon 
-                                id="delete-btn" 
-                                onClick={deletePost} 
-                            />
+                            {(post.userId === post.User.id || post.User.isAdmin) && (
+                                <div>
+                                    <BorderColorIcon 
+                                    id="modify-btn"
+                                    onClick={() => setIsUpdated(!isUpdated)}
+                                />
+                                    <DeleteIcon 
+                                        id="delete-btn" 
+                                        onClick={deletePost} 
+                                    />
+                                </div>
+                            )}
                         </div>
                         <form className="comment-form" action="" onSubmit={handleSubmitComment}>
                             <input 
@@ -252,7 +256,7 @@ function Home() {
                             const deleteComment = () => {
                                 const token = localStorage.getItem("Token");
                                 const isAdmin = localStorage.getItem("Token").isAdmin;
-                                if (comment.userId === token.userId || isAdmin === true) {
+                               // if (comment.userId === token.userId || isAdmin === true) {
                                     axios({
                                         method:"DELETE",
                                         url: `http://localhost:3001/api/posts/${post.id}/comments/${comment.id}`,
@@ -261,10 +265,11 @@ function Home() {
                                         },
                                     })
                                     .then((res) => {
-                                        setPosts(res.data);
+                                        //setPosts(res.data);
+                                        window.location.reload();
                                     })
                                     .catch((error) => console.log(error));
-                                }
+                                //}
                             };
 
                             return (
@@ -302,16 +307,18 @@ function Home() {
                                             </div>
                                         )}
                                     </div>
-                                    <div className="post-comments-options">
-                                        <BorderColorIcon 
-                                            id="modify-btn"
-                                            onClick={() => setUpdateComment(!updateComment)}
-                                        />
-                                        <DeleteIcon 
-                                            id="delete-btn" 
-                                            onClick={deleteComment} 
-                                        />
-                                    </div>
+                                    {(comment.userId === comment.User.id || comment.User.isAdmin) && (
+                                        <div className="post-comments-options">
+                                            <BorderColorIcon 
+                                                id="modify-btn"
+                                                onClick={() => setUpdateComment(!updateComment)}
+                                            />
+                                            <DeleteIcon 
+                                                id="delete-btn" 
+                                                onClick={deleteComment} 
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             )
                         })}
