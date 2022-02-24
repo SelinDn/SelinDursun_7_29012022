@@ -231,7 +231,7 @@ function Home() {
                             const modifyComment = () => {
                                 const token = localStorage.getItem("Token");
                                 const isAdmin = localStorage.getItem("Token").isAdmin;
-                                if (editComment && (comment.userId === token.userId || isAdmin === true)) {
+                                if (editComment /*&& (comment.userId === token.userId || isAdmin === true)*/) {
                                     axios({
                                         method: "PUT",
                                         url: `http://localhost:3001/api/posts/${post.id}/comments/${comment.id}`,
@@ -245,9 +245,10 @@ function Home() {
                                         },
                                     })
                                     .then((res) => {
-                                        setPosts(res.data);
-                                        setEditComment(res.data);
+                                       // setPosts(res.data);
+                                       // setEditComment(res.data);
                                         setUpdateComment(false);
+                                        window.location.reload();
                                     })
                                     .catch((error) => console.log(error));
                                 }
