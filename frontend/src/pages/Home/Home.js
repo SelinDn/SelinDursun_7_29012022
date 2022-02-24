@@ -106,7 +106,7 @@ function Home() {
                 const updatePost = () => {
                     const token = localStorage.getItem("Token");
                     const isAdmin = localStorage.getItem("Token").isAdmin;
-                    if (editPost && (post.userId === token.userId || isAdmin === true)) {
+                    if (editPost /*&& (post.userId === token.userId || isAdmin === true)*/) {
                         axios({
                             method: "PUT",
                             url: `http://localhost:3001/api/posts/${post.id}`,
@@ -120,8 +120,9 @@ function Home() {
                             },
                         })
                         .then((res) => {
-                            setPosts(res.data);
-                            setEditPost(res.data);
+                           // setPosts(res.data);
+                           // setEditPost(res.data);
+                            window.location.reload();
                             setIsUpdated(false);
                         })
                         .catch((error) => console.log(error));
