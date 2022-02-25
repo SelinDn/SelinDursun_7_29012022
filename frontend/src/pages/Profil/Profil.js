@@ -215,7 +215,7 @@ function Profil() {
                 const updatePost = () => {
                     const token = localStorage.getItem("Token");
                     const isAdmin = localStorage.getItem("Token").isAdmin;
-                    if (editPost && (post.userId === token.userId || isAdmin === true)) {
+                    if (editPost /*&& (post.userId === token.userId || isAdmin === true)*/) {
                         axios({
                             method: "PUT",
                             url: `http://localhost:3001/api/posts/${post.id}`,
@@ -229,9 +229,10 @@ function Profil() {
                             },
                         })
                         .then((res) => {
-                            setYourPosts(res.data);
-                            setEditPost(res.data);
+                           // setYourPosts(res.data);
+                           // setEditPost(res.data);
                             setIsUpdatedPost(false);
+                            window.location.reload();
                         })
                         .catch((error) => console.log(error));
                     }
@@ -240,7 +241,7 @@ function Profil() {
                 const deletePost = () => {
                     const token = localStorage.getItem("Token");
                     const isAdmin = localStorage.getItem("Token").isAdmin;
-                    if (post.userId === token.userId || isAdmin === true) {
+                    //if (post.userId === token.userId || isAdmin === true) {
                         axios({
                             method: "DELETE",
                             url: `http://localhost:3001/api/posts/${post.id}`,
@@ -249,20 +250,21 @@ function Profil() {
                             },
                         })
                         .then((res) => {
-                            setYourPosts(res.data);
+                            //setYourPosts(res.data);
+                            window.location.reload();
                         })
                         .catch((error) => console.log(error));
-                    }
+                   // }
                 };
 
                 return (
                     <div className="post" key={post.id}>
                         <div className="post-content">
                             <div className="post-content-profil-img">
-                                {post.imageURL === undefined ? (
+                                {post.User.imageURL === undefined ? (
                                     <img className="post-profil-img" src={Img} alt="Logo Groupomania" />
                                 ) : (
-                                    <img className="post-profil-img" src={post.imageURL} alt="Avatar" />
+                                    <img className="post-profil-img" src={post.User.imageURL} alt="Avatar" />
                                 )}
                             </div>
                             <div className="post-content-header">
@@ -303,14 +305,18 @@ function Profil() {
                                 id="comment-btn" 
                                 onClick={getComments} 
                             />
-                            <BorderColorIcon 
-                                id="modify-btn"
-                                onClick={() => setIsUpdatedPost(!isUpdatedPost)}
-                            />
-                            <DeleteIcon 
-                                id="delete-btn" 
-                                onClick={deletePost} 
-                            />
+                            {(post.userId === post.User.id || post.User.isAdmin) && (
+                                <div>
+                                    <BorderColorIcon 
+                                        id="modify-btn"
+                                        onClick={() => setIsUpdatedPost(!isUpdatedPost)}
+                                    />
+                                    <DeleteIcon 
+                                        id="delete-btn" 
+                                        onClick={deletePost} 
+                                    />
+                                </div>
+                            )}
                         </div>
                         <form className="comment-form" action="" onSubmit={handleSubmitComment}>
                             <input 
@@ -410,16 +416,18 @@ function Profil() {
                                             </div>
                                         )}
                                     </div>
-                                    <div className="post-comments-options">
-                                        <BorderColorIcon 
-                                            id="modify-btn"
-                                            onClick={() => setUpdateComment(!updateComment)}
-                                        />
-                                        <DeleteIcon 
-                                            id="delete-btn" 
-                                            onClick={deleteComment} 
-                                        />
-                                    </div>
+                                    {(comment.userId === comment.User.id || comment.User.isAdmin) && (
+                                        <div className="post-comments-options">
+                                            <BorderColorIcon 
+                                                id="modify-btn"
+                                                onClick={() => setUpdateComment(!updateComment)}
+                                            />
+                                            <DeleteIcon 
+                                                id="delete-btn" 
+                                                onClick={deleteComment} 
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             )
                         })}
