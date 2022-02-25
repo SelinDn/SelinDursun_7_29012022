@@ -92,38 +92,39 @@ exports.getOneUser = (req, res, next) => {
 exports.modifyUser = (req, res, next) => {
     // Contrôle de l'authentification
     User.findOne({where: {id: req.params.id} })
-    .then(() => {
-        if (user.id !== req.auth.userId  || user.isAdmin !== true) {
+    .then((user) => {
+       /* if (user.id !== req.auth.userId  || user.isAdmin !== true) {
             return res.status(403).json({
                 error: new Error('Requête non autorisée !')
             }); 
-        }
-        else if (user.imageURL !== null || user.imageURL !==undefined) {
+        }*/
+        /*if (user.imageURL !== null || user.imageURL !==undefined) {
             const filename = user.imageURL.split('/images/')[1];
             fs.unlink(`images/${filename}`, () => {
-                User.destroy({ imageURL: req.body.imageURL }, { where: { id: req.params.id} })
+                user.destroy({ imageURL: req.body.imageURL }, { where: { id: req.params.id} })
                 .then(() => res.status(200).json({ message: 'Profil modifié !'}))
                 .catch(error => res.status(400).json({error}))
             });
-        }
-        else {
+        }*/
+        //else {
             // Dans le cas de l'ajout d'une nouvelle image
-            const user = req.file ? 
+            const newUser = req.file ? 
             {
-                ...JSON.parse(req.body),
+                //...JSON.parse(req.body),
+                ...req.body,
                 imageURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
             } : { ...req.body }; 
             // Contrôle des champs de saisies
-            if (!regExp.test(req.body.pseudo)) {
+           /* if (!regExp.test(req.body.pseudo)) {
                 return res.status(500).json({ message : 'Les caractères spéciaux ne sont pas autorisés, veillez à bien remplir les champs'})
             }
             else if (!req.body.pseudo) {
                 return res.status(400).json({ message: "Veuillez ne pas laisser les champs vides !"})
-            }
-            User.update({ where: { id: req.params.id} }), ( user, { where: { id: req.params.id} })
+            }*/
+            user.update(newUser, {where: { id: req.params.id} })/*, ( user, { where: { id: req.params.id} })*/
             .then(() => res.status(200).json({message: 'Votre profil a bien été modifié !'}))
             .catch(error => res.status(400).json({ error}));
-        }
+       // }
     })
     .catch(error => res.status(500).json({ error}));
 };

@@ -11,7 +11,7 @@ import "../Profil/Profil.css";
 
 function Profil() {
     const {id} = useParams();
-    const [file, setFile] = useState([]);
+    const [file, setFile] = useState("");
     const [user, setUser] = useState([]);
     const [isUpdated, setIsUpdated] =useState(false);
     const [yourPosts, setYourPosts] = useState([]);
@@ -46,13 +46,14 @@ function Profil() {
         const token = localStorage.getItem("Token");
         const isAdmin = localStorage.getItem("Token").isAdmin;
         const formData = new FormData();
-        formData.append("file", file[0]);
+        formData.append("image", file);
 
-        if (file && (user.id === token.userId || isAdmin === true)) {
+        if (file /*&& (user.id === token.userId || isAdmin === true)*/) {
             axios({
                 method: "PUT",
                 url: `http://localhost:3001/api/users/${id}`,
                 headers: {
+                    "Content-Type": "multipart/form-data",
                     Authorization: `Bearer ${token}` ,
                 },
                 data: formData,
@@ -61,7 +62,7 @@ function Profil() {
                 setUser(res.data);
                 setFile(res.data);
                 setIsUpdated(false);
-                window.location.reload();
+              //  window.location.reload();
             })
             .catch((error) => console.log(error));
         }
@@ -125,7 +126,7 @@ function Profil() {
                     <div className="change-profil-img">
                         <input 
                             type="file" 
-                            defaultValue={user.imageURL}
+                           /* defaultValue={user.imageURL}*/
                             accept="image/*"
                             onChange={(e) => setFile(e.target.files[0])}
                         />

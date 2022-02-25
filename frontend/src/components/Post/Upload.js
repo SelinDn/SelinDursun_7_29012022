@@ -20,7 +20,7 @@ function Upload() {
         const token = localStorage.getItem("Token");
 
         const formData = new FormData();
-        formData.append("file", file[0]);
+        formData.append("image", file);
         formData.append("content", content);
         formData.append("userId", token.userId);
 
