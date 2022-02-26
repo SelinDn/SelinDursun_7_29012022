@@ -8,6 +8,7 @@ import CommentIcon from '@material-ui/icons/Comment';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
 import DeleteIcon from '@material-ui/icons/Delete';
 import "../Profil/Profil.css";
+import jwt_decode from "jwt-decode";
 
 function Profil() {
     const {id} = useParams();
@@ -21,6 +22,10 @@ function Profil() {
     const [updateComment, setUpdateComment] = useState(false);
     const [editComment, setEditComment] = useState("");
     const [comments, setComments] = useState([]);
+
+    const token = localStorage.getItem("Token");
+    const decoded = jwt_decode(token);
+    const userId = decoded["userId"];
 
     /**
     * useEffect pour getOneUser,
@@ -74,7 +79,7 @@ function Profil() {
         ) {
             const token = localStorage.getItem("Token");
             const isAdmin = localStorage.getItem("Token").isAdmin;
-            if (user.id === token.userId || isAdmin === true) {
+           // if (user.id === token.userId || isAdmin === true) {
                 axios({
                     method: "DELETE",
                     url: `http://localhost:3001/api/users/${id}`,
@@ -87,7 +92,7 @@ function Profil() {
                     window.location.href="/";
                 })
                 .catch((error) => console.log(error));
-            }
+           // }
         }
         else {
             window.location.href=`/profil/${id}`;
@@ -116,7 +121,7 @@ function Profil() {
             <div className="profil-info-container">
                 <h1 className="profil-title">Profil de {user.pseudo}</h1>
                 {isUpdated === false && <div className="profil-avatar-container">
-                    {user.imageURL === null ? (
+                    {user.imageURL === null || undefined ? (
                         <img className="profil-img" src={Img} alt="Logo Groupomania" />  
                     ) : (
                         <img className="profil-img" src={user.imageURL} alt="avatar" /> 
@@ -136,14 +141,16 @@ function Profil() {
                         </button>
                     </div>
                 )}
-                <div className="profil-options">
-                    <button className="modify-profil-btn" onClick={() => setIsUpdated(!isUpdated)}>
-                        Changer de photo de profil
-                    </button>
-                    <button className="delete-profil-btn" onClick={deleteProfile}>
-                        Supprimer mon compte
-                    </button>
-                </div>
+                {(user.id === userId /*|| post.User.isAdmin*/) && (
+                    <div className="profil-options">
+                        <button className="modify-profil-btn" onClick={() => setIsUpdated(!isUpdated)}>
+                            Changer de photo de profil
+                        </button>
+                        <button className="delete-profil-btn" onClick={deleteProfile}>
+                            Supprimer mon compte
+                        </button>
+                    </div>
+                )}
             </div>
             <h2 className="posts-user-title">Vos publications</h2>
             {yourPosts.map((post) => {
@@ -261,7 +268,7 @@ function Profil() {
                     <div className="post" key={post.id}>
                         <div className="post-content">
                             <div className="post-content-profil-img">
-                                {post.User.imageURL === undefined ? (
+                                {post.User.imageURL === null ? (
                                     <img className="post-profil-img" src={Img} alt="Logo Groupomania" />
                                 ) : (
                                     <img className="post-profil-img" src={post.User.imageURL} alt="Avatar" />
@@ -305,7 +312,7 @@ function Profil() {
                                 id="comment-btn" 
                                 onClick={getComments} 
                             />
-                            {(post.userId === post.User.id || post.User.isAdmin) && (
+                            {(post.userId === userId /*|| post.User.isAdmin*/) && (
                                 <div>
                                     <BorderColorIcon 
                                         id="modify-btn"

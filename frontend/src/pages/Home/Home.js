@@ -8,6 +8,7 @@ import BorderColorIcon from '@material-ui/icons/BorderColor';
 import DeleteIcon from '@material-ui/icons/Delete';
 import "../Home/Home.css";
 import Img from "../../img/icon.png";
+import jwt_decode from "jwt-decode";
 
 function Home() {
     const [posts, setPosts] = useState([]);
@@ -17,6 +18,10 @@ function Home() {
     const [editPost, setEditPost] = useState("");
     const [updateComment, setUpdateComment] = useState(false);
     const [editComment, setEditComment] = useState("");
+
+    const token = localStorage.getItem("Token");
+    const decoded = jwt_decode(token);
+    const userId = decoded["userId"];
 
     useEffect(() => {
         const token = localStorage.getItem("Token")
@@ -82,14 +87,15 @@ function Home() {
                         },
                     })
                     .then((res) => {
-                        setPosts(res.data);
+                        //setPosts(res.data);
+                        window.location.reload();
                     })
                     .catch((error) => console.log(error));
                 };
 
                 const getComments = async () => {
                     const token = localStorage.getItem("Token");
-                    const fetch = await axios({
+                    /*const fetch = */await axios({
                         method: "get",
                         url: `http://localhost:3001/api/posts/${post.id}/comments`,
                         headers: {
@@ -98,7 +104,8 @@ function Home() {
                     })
                     .then((res) => {
                       //setPosts(res.data);
-                      setComments(fetch);
+                      setComments(res.data);
+                      window.location.reload();
                     })
                     .catch((error) => console.log(error));
                 };
@@ -151,7 +158,7 @@ function Home() {
                     <div className="post" key={post.id}>
                         <div className="post-content">
                             <div className="post-content-profil-img">
-                                {post.User.imageURL === undefined ? (
+                                {post.User.imageURL === null ? (
                                     <img className="post-profil-img" src={Img} alt="Logo Groupomania" />
                                 ) : (
                                     <img className="post-profil-img" src={post.User.imageURL} alt="Avatar" />
@@ -195,7 +202,7 @@ function Home() {
                                 id="comment-btn" 
                                 onClick={getComments} 
                             />
-                            {(post.userId === post.User.id || post.User.isAdmin) && (
+                            {(post.userId === userId /*|| post.User.isAdmin*/) && (
                                 <div>
                                     <BorderColorIcon 
                                     id="modify-btn"
