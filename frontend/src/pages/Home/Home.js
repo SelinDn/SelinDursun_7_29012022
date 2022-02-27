@@ -93,9 +93,9 @@ function Home() {
                     .catch((error) => console.log(error));
                 };
 
-                const getComments = async () => {
+                const getComments = () => {
                     const token = localStorage.getItem("Token");
-                    /*const fetch = */await axios({
+                    /*const fetch = */ axios({
                         method: "get",
                         url: `http://localhost:3001/api/posts/${post.id}/comments`,
                         headers: {
@@ -104,8 +104,8 @@ function Home() {
                     })
                     .then((res) => {
                       //setPosts(res.data);
-                      setComments(res.data);
-                      window.location.reload();
+                     // setComments(res.data);
+                     // window.location.reload();
                     })
                     .catch((error) => console.log(error));
                 };
@@ -197,13 +197,13 @@ function Home() {
                                 id="like-btn" 
                                 onClick={likePost} 
                             />
-                            Aimé par {post.like} personnes
+                            <p>Aimé par {post.like} personnes</p>
                             <CommentIcon 
                                 id="comment-btn" 
                                 onClick={getComments} 
                             />
                             {(post.userId === userId /*|| post.User.isAdmin*/) && (
-                                <div>
+                                <div className="updated-btn-container">
                                     <BorderColorIcon 
                                     id="modify-btn"
                                     onClick={() => setIsUpdated(!isUpdated)}
@@ -223,6 +223,7 @@ function Home() {
                                 onChange={(e) => setComment(e.target.value)} 
                                 value={comment}
                                 placeholder="Say hello to..." 
+                                className="send-comment"
                             />
                             <br />
                             <input type="submit" value="Publier" className="btn-comment" />
