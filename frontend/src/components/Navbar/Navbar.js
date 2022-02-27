@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {NavLink} from "react-router-dom";
+import {Link} from "react-router-dom";
 import Logo from "../../img/icon-left-font-monochrome-white.png";
 import "../Navbar/Navbar.css";
 
@@ -19,12 +20,19 @@ function Navbar() {
     return (
         <nav>
             <div className="nav-container">
+                <div className="nav-logo">
+                    <NavLink exact to="/home">
+                        <div className="nav-logo">
+                            <img src={Logo} alt="Logo de l'enseigne" className="nav-img"/>
+                        </div>
+                    </NavLink>
+                </div>
                 {token ? (
-                    <ul>
+                    <ul className="nav-list">
                         <li className="nav-profil">
-                            <NavLink exact to="/profil">
+                            <Link exact to={`/profil/id}`}>
                                 <p>Profil</p>
-                            </NavLink>
+                            </Link>
                         </li>
                         <li className="nav-logout" onClick={logOut}>
                             <NavLink exact to="/">
@@ -34,11 +42,6 @@ function Navbar() {
                     </ul>
                 ) : (
                     <div className="nav-logo">
-                        <NavLink exact to="/">
-                            <div className="nav-logo">
-                                <img src={Logo} alt="Logo de l'enseigne" className="nav-img"/>
-                            </div>
-                        </NavLink>
                     </div>
                 )}
             </div>

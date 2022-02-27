@@ -95,7 +95,7 @@ function Home() {
 
                 const getComments = () => {
                     const token = localStorage.getItem("Token");
-                    /*const fetch = */ axios({
+                    axios({
                         method: "get",
                         url: `http://localhost:3001/api/posts/${post.id}/comments`,
                         headers: {
@@ -103,13 +103,13 @@ function Home() {
                         },
                     })
                     .then((res) => {
-                      //setPosts(res.data);
-                     // setComments(res.data);
+                      setPosts(res.data);
+                      setComments(res.data);
                      // window.location.reload();
                     })
                     .catch((error) => console.log(error));
                 };
-                
+
                 const updatePost = () => {
                     const token = localStorage.getItem("Token");
                     if (editPost /*&& (post.userId === token.userId || isAdmin === true)*/) {
@@ -181,6 +181,7 @@ function Home() {
                                         type="textarea" 
                                         defaultValue={post.content}
                                         onChange={(e) => setEditPost(e.target.value)}
+                                        className="edit-input"
                                     />
                                     <br />
                                     <button className="edit-btn" onClick={updatePost}>
@@ -228,6 +229,7 @@ function Home() {
                             <br />
                             <input type="submit" value="Publier" className="btn-comment" />
                         </form>
+                        <div className="comment-container">
                         {comments.map((comment) => {
 
                             /**
@@ -331,6 +333,7 @@ function Home() {
                                 </div>
                             )
                         })}
+                        </div>
                     </div>
                 )
             })}

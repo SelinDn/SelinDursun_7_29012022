@@ -22,12 +22,20 @@
 ul {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     font-size: 1.2rem;
-    width: 35%;
+    width: 100%;
     list-style-type: none;
 }
 
 .nav-profil, .nav-logout {
+    cursor: pointer;
+    width: 15%;
+}
+
+.nav-profil a, .nav-logout a {
+    text-decoration: none;
+    font-size: 1.5rem;
+    color: white;
     cursor: pointer;
 }

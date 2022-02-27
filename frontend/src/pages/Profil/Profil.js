@@ -313,7 +313,7 @@ function Profil() {
                                 onClick={getComments} 
                             />
                             {(post.userId === userId /*|| post.User.isAdmin*/) && (
-                                <div>
+                                <div className="updated-btn-container">
                                     <BorderColorIcon 
                                         id="modify-btn"
                                         onClick={() => setIsUpdatedPost(!isUpdatedPost)}
