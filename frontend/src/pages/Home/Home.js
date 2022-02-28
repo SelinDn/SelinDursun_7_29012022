@@ -103,8 +103,8 @@ function Home() {
                         },
                     })
                     .then((res) => {
-                      setPosts(res.data);
-                      setComments(res.data);
+                    //  setPosts(res.data);
+                    //  setComments(res.data);
                      // window.location.reload();
                     })
                     .catch((error) => console.log(error));
@@ -206,9 +206,9 @@ function Home() {
                             {(post.userId === userId /*|| post.User.isAdmin*/) && (
                                 <div className="updated-btn-container">
                                     <BorderColorIcon 
-                                    id="modify-btn"
-                                    onClick={() => setIsUpdated(!isUpdated)}
-                                />
+                                        id="modify-btn"
+                                        onClick={() => setIsUpdated(!isUpdated)}
+                                    />
                                     <DeleteIcon 
                                         id="delete-btn" 
                                         onClick={deletePost} 
@@ -230,44 +230,44 @@ function Home() {
                             <input type="submit" value="Publier" className="btn-comment" />
                         </form>
                         <div className="comment-container">
-                        {comments.map((comment) => {
+                            {comments.map((comment) => {
 
-                            /**
-                             * (Dépendant du .map comments)
-                             * deleteComment pour la suppression d'un commentaire,
-                             * modifyComment pour la modification d'un commentaire,
-                             * (Tous rattachés au useEffect de getAllPosts).
-                             */
-                            const modifyComment = () => {
-                                const token = localStorage.getItem("Token");
-                                const isAdmin = localStorage.getItem("Token").isAdmin;
-                                if (editComment /*&& (comment.userId === token.userId || isAdmin === true)*/) {
-                                    axios({
-                                        method: "PUT",
-                                        url: `http://localhost:3001/api/posts/${post.id}/comments/${comment.id}`,
-                                        headers: {
-                                            Authorization: `Bearer ${token}` ,
-                                        },
-                                        data: {
-                                            content: editComment,
-                                            postId: post.id,
-                                            userId: token.userId,
-                                        },
-                                    })
-                                    .then((res) => {
-                                       // setPosts(res.data);
-                                       // setEditComment(res.data);
-                                        setUpdateComment(false);
-                                        window.location.reload();
-                                    })
-                                    .catch((error) => console.log(error));
-                                }
-                            };
+                                /**
+                                * (Dépendant du .map comments)
+                                * deleteComment pour la suppression d'un commentaire,
+                                * modifyComment pour la modification d'un commentaire,
+                                * (Tous rattachés au useEffect de getAllPosts).
+                                */
+                                const modifyComment = () => {
+                                    const token = localStorage.getItem("Token");
+                                    const isAdmin = localStorage.getItem("Token").isAdmin;
+                                    if (editComment /*&& (comment.userId === token.userId || isAdmin === true)*/) {
+                                        axios({
+                                            method: "PUT",
+                                            url: `http://localhost:3001/api/posts/${post.id}/comments/${comment.id}`,
+                                            headers: {
+                                                Authorization: `Bearer ${token}` ,
+                                            },
+                                            data: {
+                                                content: editComment,
+                                                postId: post.id,
+                                                userId: token.userId,
+                                            },
+                                        })
+                                        .then((res) => {
+                                            // setPosts(res.data);
+                                            // setEditComment(res.data);
+                                            setUpdateComment(false);
+                                            window.location.reload();
+                                        })
+                                        .catch((error) => console.log(error));
+                                    }
+                                };
 
-                            const deleteComment = () => {
-                                const token = localStorage.getItem("Token");
-                                const isAdmin = localStorage.getItem("Token").isAdmin;
-                               // if (comment.userId === token.userId || isAdmin === true) {
+                                const deleteComment = () => {
+                                    const token = localStorage.getItem("Token");
+                                    const isAdmin = localStorage.getItem("Token").isAdmin;
+                                    // if (comment.userId === token.userId || isAdmin === true) {
                                     axios({
                                         method:"DELETE",
                                         url: `http://localhost:3001/api/posts/${post.id}/comments/${comment.id}`,
@@ -280,59 +280,59 @@ function Home() {
                                         window.location.reload();
                                     })
                                     .catch((error) => console.log(error));
-                                //}
-                            };
-
-                            return (
-                                <div className="comments-container" key={comment.id}>
-                                    <div className="post-comments">
-                                        <div className="post-content-profil-img">
-                                            {comment.User.imageURL === null ? (
-                                                <img className="post-profil-img" src={Img} alt="Logo Groupomania" />
-                                            ) : (
-                                                <img className="post-profil-img" src={comment.User.imageURL} alt="Avatar" />
+                                };
+                                if (post.id === comment.postId) {
+                                return (
+                                    <div className="comments-container" key={comment.id}>
+                                        <div className="post-comments">
+                                            <div className="post-content-profil-img">
+                                                {comment.User.imageURL === null ? (
+                                                    <img className="post-profil-img" src={Img} alt="Logo Groupomania" />
+                                                ) : (
+                                                    <img className="post-profil-img" src={comment.User.imageURL} alt="Avatar" />
+                                                )}
+                                            </div>
+                                            <div className="post-comments-header">
+                                                <Link to={`/profil/${comment.User.id}`}>
+                                                    Posté par {comment.userId}
+                                                </Link>
+                                            </div>
+                                            <div className="post-comments-date">
+                                                {new Date(comment.createdAt).toLocaleDateString("fr-FR")}
+                                            </div>
+                                        </div>
+                                        <div className="post-comments-content">
+                                            {updateComment === false && <p>{comment.content}</p>}
+                                            {updateComment && (
+                                                <div className="comment-edit-content">
+                                                    <input 
+                                                        type="textarea" 
+                                                        defaultValue={comment.content}
+                                                        onChange={(e) => setEditComment(e.target.value)}
+                                                    />
+                                                    <br />
+                                                    <button className="edit-btn" onClick={modifyComment}>
+                                                        Valider la modification
+                                                    </button>
+                                                </div>
                                             )}
                                         </div>
-                                        <div className="post-comments-header">
-                                            <Link to={`/profil/${comment.User.id}`}>
-                                                Posté par {comment.userId}
-                                            </Link>
-                                        </div>
-                                        <div className="post-comments-date">
-                                            {new Date(comment.createdAt).toLocaleDateString("fr-FR")}
-                                        </div>
-                                    </div>
-                                    <div className="post-comments-content">
-                                        {updateComment === false && <p>{comment.content}</p>}
-                                        {updateComment && (
-                                            <div className="comment-edit-content">
-                                                <input 
-                                                    type="textarea" 
-                                                    defaultValue={comment.content}
-                                                    onChange={(e) => setEditComment(e.target.value)}
+                                        {(comment.userId === comment.User.id || comment.User.isAdmin) && (
+                                            <div className="post-comments-options">
+                                                <BorderColorIcon 
+                                                    id="modify-btn"
+                                                    onClick={() => setUpdateComment(!updateComment)}
                                                 />
-                                                <br />
-                                                <button className="edit-btn" onClick={modifyComment}>
-                                                    Valider la modification
-                                                </button>
+                                                <DeleteIcon 
+                                                    id="delete-btn" 
+                                                    onClick={deleteComment} 
+                                                />
                                             </div>
                                         )}
                                     </div>
-                                    {(comment.userId === comment.User.id || comment.User.isAdmin) && (
-                                        <div className="post-comments-options">
-                                            <BorderColorIcon 
-                                                id="modify-btn"
-                                                onClick={() => setUpdateComment(!updateComment)}
-                                            />
-                                            <DeleteIcon 
-                                                id="delete-btn" 
-                                                onClick={deleteComment} 
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            )
-                        })}
+                                )
+                                }
+                            })}
                         </div>
                     </div>
                 )
