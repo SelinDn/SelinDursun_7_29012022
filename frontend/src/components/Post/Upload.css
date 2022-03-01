@@ -60,7 +60,7 @@ input::placeholder {
     cursor: pointer;
 }
 
-@media screen and (min-width: 325px) and (max-width: 424px) {
+@media screen and (min-width: 325px) and (max-width: 675px) {
     .upload-form-container {
         width: 90%;
     }
@@ -72,4 +72,15 @@ input::placeholder {
     .btn-upload {
         width: 15rem;
     }
+}
+
+@media screen and (min-width: 675px) and (max-width: 1024px) {
+    .upload-form-container {
+        width: 90%;
+    }
+
+    .form-input-file, .form-input-content {
+        width: 80%;
+    }
+    
 }

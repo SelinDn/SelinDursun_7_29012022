@@ -76,3 +76,29 @@ input {
     width: 9rem;
     font-size: 1rem;
 }
+
+@media screen and (min-width: 325px) and (max-width: 675px) {
+    .auth-description {
+        text-align: center;
+    }
+
+    .forget-password {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}
+
+/*@media screen and (min-width: 425px) and (max-width: 767px) {
+    .auth-description {
+        text-align: center;
+    }
+
+    .forget-password {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+}*/

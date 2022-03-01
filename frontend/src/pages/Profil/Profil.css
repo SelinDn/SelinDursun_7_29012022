@@ -62,7 +62,7 @@
     padding: 1rem;
 }
 
-@media screen and (min-width: 325px) and (max-width: 424px) {
+@media screen and (min-width: 325px) and (max-width: 675px) {
     .post {
         width: 90%;
     }
@@ -86,5 +86,16 @@
 
     .updated-btn-container {
         margin: 2rem;
+    }
+
+    .post-comments-options {
+        display: flex;
+        justify-content: center;
+    }
+}
+
+@media screen and (min-width: 675px) and (max-width: 1024px) {
+    .post {
+        width: 90%;
     }
 }

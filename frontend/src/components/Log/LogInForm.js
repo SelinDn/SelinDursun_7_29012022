@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import "../../pages/Auth/Auth.css";
 
 /**
  * Création du component LogInForm,
@@ -66,7 +67,7 @@ function LogInForm() {
             <br />
             <input type="submit" value="Se connecter" className="btn-form"/>
             <br />
-            <p>Mot de passe oublié ? Contactez-nous à l'adresse <br/>
+            <p className="forget-password">Mot de passe oublié ? Contactez-nous à l'adresse <br/>
                 <strong>helpaccount@groupomania.com</strong>
             </p>
         </form>

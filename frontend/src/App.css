@@ -6,4 +6,5 @@ body {
   margin: 0 auto;
   padding: 0;
   background-color: #F4F7F2;
+  max-width: 1700px;
 }
