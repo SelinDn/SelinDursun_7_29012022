@@ -321,7 +321,7 @@ function Home() {
                                                 </div>
                                             )}
                                         </div>
-                                        {(comment.userId === comment.User.id || comment.User.isAdmin) && (
+                                        {(comment.userId === userId /*|| comment.User.isAdmin*/) && (
                                             <div className="post-comments-options">
                                                 <BorderColorIcon 
                                                     id="modify-btn"

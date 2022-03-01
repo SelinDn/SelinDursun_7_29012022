@@ -32,6 +32,7 @@ function LogInForm() {
             }
             else {
                 localStorage.setItem("Token", res.data.token);
+                localStorage.setItem("userId", res.data.userId);
                 window.location = "/home";
             }
         })

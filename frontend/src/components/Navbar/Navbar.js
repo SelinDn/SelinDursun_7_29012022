@@ -3,13 +3,14 @@ import {NavLink} from "react-router-dom";
 import {Link} from "react-router-dom";
 import Logo from "../../img/icon-left-font-monochrome-white.png";
 import "../Navbar/Navbar.css";
-//import jwt_decode from "jwt-decode";
+import jwt_decode from "jwt-decode";
 
 function Navbar() {
     const [token, setToken] = useState(true);
-   /* const userId = localStorage.getItem("Token");
-    const decoded = jwt_decode(userId);
+  /*  const token = localStorage.getItem("Token");
+    const decoded = jwt_decode(token);
     const user = decoded["userId"];*/
+    const user = localStorage.getItem("userId");
     
     useEffect(() => {
         setToken(localStorage.getItem("Token"));
@@ -34,7 +35,7 @@ function Navbar() {
                 {token ? (
                     <ul className="nav-list">
                         <li className="nav-profil">
-                            <Link to={`/profil/`}>
+                            <Link to={`/profil/${user}`}>
                                 <p>Profil</p>
                             </Link>
                         </li>

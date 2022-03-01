@@ -197,7 +197,7 @@ function Profil() {
                         },
                     })
                     .then((res) => {
-                        setYourPosts(res.data);
+                       // setYourPosts(res.data);
                         window.location.reload();
                     })
                     .catch((error) => console.log(error));
@@ -213,7 +213,7 @@ function Profil() {
                         },
                     })
                     .then((res) => {
-                        setYourPosts(res.data);
+                      //  setYourPosts(res.data);
                         setComments(res.data);
                     })
                     .catch((error) => console.log(error));
@@ -332,7 +332,8 @@ function Profil() {
                                 id="comment" 
                                 onChange={(e) => setComment(e.target.value)} 
                                 value={comment}
-                                placeholder="Say hello to..." 
+                                placeholder="Say hello to..."
+                                className="send-comment"
                             />
                             <br />
                             <input type="submit" value="Publier" className="btn-comment" />
@@ -387,24 +388,24 @@ function Profil() {
                                     .catch((error) => console.log(error));
                                 }
                             };
-    
+                            if (comment.postId === post.id) {
                             return (
                                 <div className="comments-container" key={comment.id}>
                                     <div className="post-comments">
-                                        <div className="post-content-profil-img">
+                                        <div className="post-comment-profil-img">
                                             {comment.User.imageURL === null ? (
-                                                <img className="post-profil-img" src={Img} alt="Logo Groupomania" />
+                                                <img className="comment-profil-img" src={Img} alt="Logo Groupomania" />
                                             ) : (
-                                                <img className="post-profil-img" src={comment.User.imageURL} alt="Avatar" />
+                                                <img className="comment-profil-img" src={comment.User.imageURL} alt="Avatar" />
                                             )}
                                         </div>
                                         <div className="post-comments-header">
                                             <Link to={`/profil/${comment.User.id}`}>
-                                                Posté par {comment.userId}
+                                                Posté par {comment.User.pseudo}
                                             </Link>
                                         </div>
                                         <div className="post-comments-date">
-                                            {new Date(comment.createdAt).toLocaleDateString("fr-FR")}
+                                           le {new Date(comment.createdAt).toLocaleDateString("fr-FR")}
                                         </div>
                                     </div>
                                     <div className="post-comments-content">
@@ -437,6 +438,7 @@ function Profil() {
                                     )}
                                 </div>
                             )
+                            }
                         })}
                     </div>
                 )
