@@ -138,5 +138,47 @@
     box-shadow: 2px 2px 2px 2px gainsboro;
 }
 
+.comment-container {
+    margin: 2rem 0;
+}
+
+.comments-container {
+    background-color: gainsboro;
+    margin-bottom: 3rem;
+}
+
+.post-comments {
+    display: flex;
+    align-items: center;
+}
+
+.post-comment-profil-img {
+    padding: 1rem 1rem;
+}
+
+.comment-profil-img {
+    width: 5rem;
+    height: 5rem;
+    object-fit: cover;
+    border-radius: 5rem;
+    box-shadow: 1px 1px 7px 2px dimgray;
+}
+
+.post-comments-header {
+    padding: 1rem;
+}
+
+.post-comments-content {
+    padding: 0 3rem;
+    font-size: 1.3rem;
+}
+
+.post-comments-options #modify-btn, .post-comments-options #delete-btn {
+    font-size: 1.5rem;
+    color: dimgray;
+    cursor: pointer;
+    padding: 0 2rem;
+}
+
 
 

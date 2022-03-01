@@ -50,7 +50,7 @@ exports.modifyComment = (req, res, next) => {
 
 // Récupération de tout les commentaires 
 exports.getAllComments = (req, res, next) => {
-    Comment.findAll({ order: [['createdAt', 'DESC']], include: {model: User, model: Post}, where: {postId: req.params.id} })
+    Comment.findAll({ order: [['createdAt', 'DESC']], where: { postId: req.params.id }, include: [{model: User},{ model:Post} ]})
     .then(comments => res.status(200).json(comments))
     .catch(error => res.status(400).json({ error}));
 };

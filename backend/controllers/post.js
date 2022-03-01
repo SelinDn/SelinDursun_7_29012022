@@ -1,12 +1,13 @@
 const db = require("../models/index");
 const User = db.user;
 const Post = db.post;
+const Comment = db.comment;
 const fs = require("fs");
 const post = require("../models/post");
 
 // Récupération de tout les posts 
 exports.getAllPosts = (req, res, next) => {
-    Post.findAll({ order: [['createdAt', 'DESC']], include: {model: User} })
+    Post.findAll({ order: [['createdAt', 'DESC']], include: [{model: User}, {model:Comment}] })
     .then(posts => res.status(200).json(posts))
     .catch(error => res.status(400).json({ error}));
 };

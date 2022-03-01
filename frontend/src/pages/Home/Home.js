@@ -18,6 +18,7 @@ function Home() {
     const [editPost, setEditPost] = useState("");
     const [updateComment, setUpdateComment] = useState(false);
     const [editComment, setEditComment] = useState("");
+   // const category = {comments:[{userId:'Product1', postId:10, content:{comment.content}}, {userId:'Product2', postId:1, content:'blabla'}]};
 
     const token = localStorage.getItem("Token");
     const decoded = jwt_decode(token);
@@ -38,12 +39,13 @@ function Home() {
         .catch((error) => console.log(error));
     }, []);
 
+
     return (
         <section className="home-page">
             <Upload />
             <h1 className="home-title">Récentes publications</h1>
             {posts.map((post) => {
-
+    
                 /**
                  * Logique likePost,
                  * handleSubmitComment pour création de commentaires,
@@ -104,12 +106,12 @@ function Home() {
                     })
                     .then((res) => {
                     //  setPosts(res.data);
-                    //  setComments(res.data);
+                      setComments(res.data);
                      // window.location.reload();
                     })
                     .catch((error) => console.log(error));
                 };
-
+    
                 const updatePost = () => {
                     const token = localStorage.getItem("Token");
                     if (editPost /*&& (post.userId === token.userId || isAdmin === true)*/) {
@@ -201,7 +203,7 @@ function Home() {
                             <p>Aimé par {post.like} personnes</p>
                             <CommentIcon 
                                 id="comment-btn" 
-                                onClick={getComments} 
+                               onClick={getComments} 
                             />
                             {(post.userId === userId /*|| post.User.isAdmin*/) && (
                                 <div className="updated-btn-container">
@@ -229,8 +231,9 @@ function Home() {
                             <br />
                             <input type="submit" value="Publier" className="btn-comment" />
                         </form>
+                        
                         <div className="comment-container">
-                            {comments.map((comment) => {
+                            {comments.map((comment) => { 
 
                                 /**
                                 * (Dépendant du .map comments)
@@ -281,24 +284,25 @@ function Home() {
                                     })
                                     .catch((error) => console.log(error));
                                 };
-                                if (post.id === comment.postId) {
+                                console.log(comments)
+                                if (comment.postId === post.id) {
                                 return (
                                     <div className="comments-container" key={comment.id}>
                                         <div className="post-comments">
-                                            <div className="post-content-profil-img">
+                                            <div className="post-comment-profil-img">
                                                 {comment.User.imageURL === null ? (
-                                                    <img className="post-profil-img" src={Img} alt="Logo Groupomania" />
+                                                    <img className="comment-profil-img" src={Img} alt="Logo Groupomania" />
                                                 ) : (
-                                                    <img className="post-profil-img" src={comment.User.imageURL} alt="Avatar" />
+                                                    <img className="comment-profil-img" src={comment.User.imageURL} alt="Avatar" />
                                                 )}
                                             </div>
                                             <div className="post-comments-header">
                                                 <Link to={`/profil/${comment.User.id}`}>
-                                                    Posté par {comment.userId}
+                                                    Posté par {comment.User.pseudo}
                                                 </Link>
                                             </div>
                                             <div className="post-comments-date">
-                                                {new Date(comment.createdAt).toLocaleDateString("fr-FR")}
+                                               le  {new Date(comment.createdAt).toLocaleDateString("fr-FR")}
                                             </div>
                                         </div>
                                         <div className="post-comments-content">
@@ -331,7 +335,7 @@ function Home() {
                                         )}
                                     </div>
                                 )
-                                }
+                            }
                             })}
                         </div>
                     </div>
