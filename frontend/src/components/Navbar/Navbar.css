@@ -39,3 +39,22 @@ ul {
     color: white;
     cursor: pointer;
 }
+
+@media screen and (min-width: 325px) and (max-width: 424px) {
+    nav {
+        width: 100%;
+    }
+
+    .nav-logo {
+        height: 5.3rem;
+    }
+
+    .nav-logo img {
+        height: 7rem;
+    }
+
+    .nav-list {
+        display: flex;
+        justify-content: space-evenly;
+    }
+}

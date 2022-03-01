@@ -374,7 +374,7 @@ function Profil() {
                             const deleteComment = () => {
                                 const token = localStorage.getItem("Token");
                                 const isAdmin = localStorage.getItem("Token").isAdmin;
-                                if (comment.userId === token.userId || isAdmin === true) {
+                               // if (comment.userId === token.userId || isAdmin === true) {
                                     axios({
                                         method:"DELETE",
                                         url: `http://localhost:3001/api/posts/${post.id}/comments/${comment.id}`,
@@ -383,10 +383,11 @@ function Profil() {
                                         },
                                     })
                                     .then((res) => {
-                                        setYourPosts(res.data);
+                                       // setYourPosts(res.data);
+                                       window.location.reload();
                                     })
                                     .catch((error) => console.log(error));
-                                }
+                               // }
                             };
                             if (comment.postId === post.id) {
                             return (
@@ -424,7 +425,7 @@ function Profil() {
                                             </div>
                                         )}
                                     </div>
-                                    {(comment.userId === comment.User.id || comment.User.isAdmin) && (
+                                    {(comment.userId === userId /*|| comment.User.isAdmin*/) && (
                                         <div className="post-comments-options">
                                             <BorderColorIcon 
                                                 id="modify-btn"

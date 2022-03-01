@@ -59,3 +59,17 @@ input::placeholder {
     padding: 0.8rem;
     cursor: pointer;
 }
+
+@media screen and (min-width: 325px) and (max-width: 424px) {
+    .upload-form-container {
+        width: 90%;
+    }
+
+    .form-input-content, .form-input-file {
+        width: 18rem;
+    }
+
+    .btn-upload {
+        width: 15rem;
+    }
+}

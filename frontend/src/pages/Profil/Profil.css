@@ -61,3 +61,30 @@
     width: 100%;
     padding: 1rem;
 }
+
+@media screen and (min-width: 325px) and (max-width: 424px) {
+    .post {
+        width: 90%;
+    }
+
+    .post-engagement {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .post-comments {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .post-comments-content {
+        display: flex;
+        justify-content: center;
+    }
+
+    .updated-btn-container {
+        margin: 2rem;
+    }
+}
