@@ -26,6 +26,7 @@ function Profil() {
     const token = localStorage.getItem("Token");
     const decoded = jwt_decode(token);
     const userId = decoded["userId"];
+    const isAdmin = decoded["isAdmin"];
 
     /**
     * useEffect pour getOneUser,
@@ -141,7 +142,7 @@ function Profil() {
                         </button>
                     </div>
                 )}
-                {(user.id === userId /*|| post.User.isAdmin*/) && (
+                {(user.id === userId || isAdmin) && (
                     <div className="profil-options">
                         <button className="modify-profil-btn" onClick={() => setIsUpdated(!isUpdated)}>
                             Changer de photo de profil
@@ -312,7 +313,7 @@ function Profil() {
                                 id="comment-btn" 
                                 onClick={getComments} 
                             />
-                            {(post.userId === userId /*|| post.User.isAdmin*/) && (
+                            {(post.userId === userId || isAdmin) && (
                                 <div className="updated-btn-container">
                                     <BorderColorIcon 
                                         id="modify-btn"
@@ -425,7 +426,7 @@ function Profil() {
                                             </div>
                                         )}
                                     </div>
-                                    {(comment.userId === userId /*|| comment.User.isAdmin*/) && (
+                                    {(comment.userId === userId || isAdmin) && (
                                         <div className="post-comments-options">
                                             <BorderColorIcon 
                                                 id="modify-btn"

@@ -23,6 +23,7 @@ function Home() {
     const token = localStorage.getItem("Token");
     const decoded = jwt_decode(token);
     const userId = decoded["userId"];
+    const isAdmin = decoded["isAdmin"];
 
     useEffect(() => {
         const token = localStorage.getItem("Token")
@@ -205,8 +206,9 @@ function Home() {
                                 id="comment-btn" 
                                onClick={getComments} 
                             />
-                            {(post.userId === userId /*|| post.User.isAdmin*/) && (
-                                <div className="updated-btn-container">
+                            {(post.userId === userId || isAdmin ) && (
+                                console.log(isAdmin),
+                                <div className ="updated-btn-container">
                                     <BorderColorIcon 
                                         id="modify-btn"
                                         onClick={() => setIsUpdated(!isUpdated)}
@@ -321,7 +323,7 @@ function Home() {
                                                 </div>
                                             )}
                                         </div>
-                                        {(comment.userId === userId /*|| comment.User.isAdmin*/) && (
+                                        {(comment.userId === userId || isAdmin) && (
                                             <div className="post-comments-options">
                                                 <BorderColorIcon 
                                                     id="modify-btn"
