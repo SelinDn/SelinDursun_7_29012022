@@ -98,14 +98,15 @@ exports.modifyUser = (req, res, next) => {
                 error: new Error('Requête non autorisée !')
             }); 
         }*/
-        /*if (user.imageURL !== null || user.imageURL !==undefined) {
+        if (user.id === req.auth.userId || req.auth.isAdmin) {
+            if (req.file && user.imageURL !== null) {
             const filename = user.imageURL.split('/images/')[1];
             fs.unlink(`images/${filename}`, () => {
                 user.destroy({ imageURL: req.body.imageURL }, { where: { id: req.params.id} })
                 .then(() => res.status(200).json({ message: 'Profil modifié !'}))
                 .catch(error => res.status(400).json({error}))
             });
-        }*/
+            }
         //else {
             // Dans le cas de l'ajout d'une nouvelle image
             const newUser = req.file ? 
@@ -125,6 +126,7 @@ exports.modifyUser = (req, res, next) => {
             .then(() => res.status(200).json({message: 'Votre profil a bien été modifié !'}))
             .catch(error => res.status(400).json({ error}));
        // }
+        }
     })
     .catch(error => res.status(500).json({ error}));
 };
@@ -138,6 +140,7 @@ exports.deleteUser = (req, res, next) => {
                 error: new Error('Requête non autorisée !')
             }); 
         }*/
+        if (user.id === req.auth.userId || req.auth.isAdmin) {
         // Chercher l'image afin de la supprimer aussi du dossier images et de la db
         const filename = user.imageURL.split('/images/')[1];
         fs.unlink(`images/${filename}`, () => {
@@ -145,6 +148,7 @@ exports.deleteUser = (req, res, next) => {
             .then(() => res.status(200).json({ message: 'Votre compte a bien été supprimé !'}))
             .catch(error => res.status(400).json({error}))
         });
+    }
     })
     .catch(error => res.status(500).json({ error}));
 };

@@ -54,9 +54,11 @@ exports.modifyPost = (req, res, next) => {
         else if (!req.body.content) {
             return res.status(400).json({ message: "Veuillez ne pas laisser les champs vides !"})
         }
+        else if (post.userId === req.auth.userId || req.auth.isAdmin) {
         post.update({ content: req.body.content })
         .then(() => res.status(200).json({ message: "Post modifié" }))
         .catch((error) => res.status(400).json({error}))
+        }
     })
     .catch(error => res.status(500).json({ error}));
     
@@ -106,6 +108,7 @@ exports.deletePost = (req, res, next) => {
                 error: new Error('Requête non autorisée !')
             }); 
         }*/
+        if (post.userId === req.auth.userId || req.auth.isAdmin) {
         /*else*/ if (post.attachment !== null /*|| post.attachment !==undefined*/) {
             const filename = post.attachment.split('/images/')[1];
             fs.unlink(`images/${filename}`, () => {
@@ -114,11 +117,12 @@ exports.deletePost = (req, res, next) => {
                 .catch(error => res.status(400).json({error}))
             });
         }
-        else {
+        /*else {*/
             post.destroy({ where: { id: req.params.id} })
             .then(() => res.status(200).json({ message: 'Post supprimé !'}))
             .catch(error => res.status(400).json({error}))
-        }
+        //}
+    }
     })
     .catch(error => res.status(500).json({ error}));
 };
