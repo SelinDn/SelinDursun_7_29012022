@@ -23,6 +23,7 @@ function Profil() {
     const [editComment, setEditComment] = useState("");
     const [comments, setComments] = useState([]);
 
+    //JWT_DECODE
     const token = localStorage.getItem("Token");
     const decoded = jwt_decode(token);
     const userId = decoded["userId"];
@@ -50,11 +51,11 @@ function Profil() {
 
     const updateUser = () => {
         const token = localStorage.getItem("Token");
-        const isAdmin = localStorage.getItem("Token").isAdmin;
+
         const formData = new FormData();
         formData.append("image", file);
 
-        if (file /*&& (user.id === token.userId || isAdmin === true)*/) {
+        if (file) {
             axios({
                 method: "PUT",
                 url: `http://localhost:3001/api/users/${id}`,
@@ -68,7 +69,7 @@ function Profil() {
                 setUser(res.data);
                 setFile(res.data);
                 setIsUpdated(false);
-              //  window.location.reload();
+                window.location.reload();
             })
             .catch((error) => console.log(error));
         }
@@ -79,21 +80,18 @@ function Profil() {
             window.confirm("Votre compte va être définitivement supprimé. Êtes-vous sûr de vouloir cela ? ")
         ) {
             const token = localStorage.getItem("Token");
-            const isAdmin = localStorage.getItem("Token").isAdmin;
-           // if (user.id === token.userId || isAdmin === true) {
-                axios({
-                    method: "DELETE",
-                    url: `http://localhost:3001/api/users/${id}`,
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                })
-                .then((res) => {
-                    localStorage.clear();
-                    window.location.href="/";
-                })
-                .catch((error) => console.log(error));
-           // }
+            axios({
+                method: "DELETE",
+                url: `http://localhost:3001/api/users/${id}`,
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                localStorage.clear();
+                window.location.href="/";
+            })
+            .catch((error) => console.log(error));
         }
         else {
             window.location.href=`/profil/${id}`;
@@ -132,7 +130,6 @@ function Profil() {
                     <div className="change-profil-img">
                         <input 
                             type="file" 
-                           /* defaultValue={user.imageURL}*/
                             accept="image/*"
                             onChange={(e) => setFile(e.target.files[0])}
                         />
@@ -166,7 +163,7 @@ function Profil() {
                 const likePost = () => {
                     const token = localStorage.getItem("Token");
                     axios({
-                        method: "post",
+                        method: "POST",
                         url: `http://localhost:3001/api/posts/${post.id}`,
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -186,7 +183,7 @@ function Profil() {
                 const handleSubmitComment = () => {
                     const token = localStorage.getItem("Token");
                     axios({
-                        method: "post",
+                        method: "POST",
                         url: `http://localhost:3001/api/posts/${post.id}/comments`,
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -198,7 +195,6 @@ function Profil() {
                         },
                     })
                     .then((res) => {
-                       // setYourPosts(res.data);
                         window.location.reload();
                     })
                     .catch((error) => console.log(error));
@@ -207,14 +203,13 @@ function Profil() {
                 const getComments = () => {
                     const token = localStorage.getItem("Token");
                     axios({
-                        method: "get",
+                        method: "GET",
                         url: `http://localhost:3001/api/posts/${post.id}/comments`,
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
                     })
                     .then((res) => {
-                      //  setYourPosts(res.data);
                         setComments(res.data);
                     })
                     .catch((error) => console.log(error));
@@ -222,8 +217,7 @@ function Profil() {
 
                 const updatePost = () => {
                     const token = localStorage.getItem("Token");
-                    const isAdmin = localStorage.getItem("Token").isAdmin;
-                    if (editPost /*&& (post.userId === token.userId || isAdmin === true)*/) {
+                    if (editPost) {
                         axios({
                             method: "PUT",
                             url: `http://localhost:3001/api/posts/${post.id}`,
@@ -237,8 +231,6 @@ function Profil() {
                             },
                         })
                         .then((res) => {
-                           // setYourPosts(res.data);
-                           // setEditPost(res.data);
                             setIsUpdatedPost(false);
                             window.location.reload();
                         })
@@ -248,21 +240,17 @@ function Profil() {
 
                 const deletePost = () => {
                     const token = localStorage.getItem("Token");
-                    const isAdmin = localStorage.getItem("Token").isAdmin;
-                    //if (post.userId === token.userId || isAdmin === true) {
-                        axios({
-                            method: "DELETE",
-                            url: `http://localhost:3001/api/posts/${post.id}`,
-                            headers: {
-                                Authorization: `Bearer ${token}` ,
-                            },
-                        })
-                        .then((res) => {
-                            //setYourPosts(res.data);
-                            window.location.reload();
-                        })
-                        .catch((error) => console.log(error));
-                   // }
+                    axios({
+                        method: "DELETE",
+                        url: `http://localhost:3001/api/posts/${post.id}`,
+                        headers: {
+                            Authorization: `Bearer ${token}` ,
+                        },
+                    })
+                    .then((res) => {
+                        window.location.reload();
+                    })
+                    .catch((error) => console.log(error));
                 };
 
                 return (
@@ -308,7 +296,7 @@ function Profil() {
                                 id="like-btn" 
                                 onClick={likePost} 
                             />
-                            Aimé par {post.like} personnes
+                            <p>{post.like} people like this</p>
                             <CommentIcon 
                                 id="comment-btn" 
                                 onClick={getComments} 
@@ -349,8 +337,7 @@ function Profil() {
                             */
                             const modifyComment = () => {
                                 const token = localStorage.getItem("Token");
-                                const isAdmin = localStorage.getItem("Token").isAdmin;
-                                if (editComment && (comment.userId === token.userId || isAdmin === true)) {
+                                if (editComment) {
                                     axios({
                                         method: "PUT",
                                         url: `http://localhost:3001/api/posts/${post.id}/comments/${comment.id}`,
@@ -364,9 +351,8 @@ function Profil() {
                                         },
                                     })
                                     .then((res) => {
-                                        setYourPosts(res.data);
-                                        setEditComment(res.data);
                                         setUpdateComment(false);
+                                        window.location.reload();
                                     })
                                     .catch((error) => console.log(error));
                                 }
@@ -374,72 +360,69 @@ function Profil() {
     
                             const deleteComment = () => {
                                 const token = localStorage.getItem("Token");
-                                const isAdmin = localStorage.getItem("Token").isAdmin;
-                               // if (comment.userId === token.userId || isAdmin === true) {
-                                    axios({
-                                        method:"DELETE",
-                                        url: `http://localhost:3001/api/posts/${post.id}/comments/${comment.id}`,
-                                        headers: {
-                                            Authorization: `Bearer ${token}`,
-                                        },
-                                    })
-                                    .then((res) => {
-                                       // setYourPosts(res.data);
-                                       window.location.reload();
-                                    })
-                                    .catch((error) => console.log(error));
-                               // }
+                                axios({
+                                    method:"DELETE",
+                                    url: `http://localhost:3001/api/posts/${post.id}/comments/${comment.id}`,
+                                    headers: {
+                                        Authorization: `Bearer ${token}`,
+                                    },
+                                })
+                                .then((res) => {
+                                    window.location.reload();
+                                })
+                                .catch((error) => console.log(error));
                             };
+
                             if (comment.postId === post.id) {
-                            return (
-                                <div className="comments-container" key={comment.id}>
-                                    <div className="post-comments">
-                                        <div className="post-comment-profil-img">
-                                            {comment.User.imageURL === null ? (
-                                                <img className="comment-profil-img" src={Img} alt="Logo Groupomania" />
-                                            ) : (
-                                                <img className="comment-profil-img" src={comment.User.imageURL} alt="Avatar" />
+                                return (
+                                    <div className="comments-container" key={comment.id}>
+                                        <div className="post-comments">
+                                            <div className="post-comment-profil-img">
+                                                {comment.User.imageURL === null ? (
+                                                    <img className="comment-profil-img" src={Img} alt="Logo Groupomania" />
+                                                ) : (
+                                                    <img className="comment-profil-img" src={comment.User.imageURL} alt="Avatar" />
+                                                )}
+                                            </div>
+                                            <div className="post-comments-header">
+                                                <Link to={`/profil/${comment.User.id}`}>
+                                                    Posté par {comment.User.pseudo}
+                                                </Link>
+                                            </div>
+                                            <div className="post-comments-date">
+                                                le {new Date(comment.createdAt).toLocaleDateString("fr-FR")}
+                                            </div>
+                                        </div>
+                                        <div className="post-comments-content">
+                                            {updateComment === false && <p>{comment.content}</p>}
+                                            {updateComment && (
+                                                <div className="comment-edit-content">
+                                                    <input 
+                                                        type="textarea" 
+                                                        defaultValue={comment.content}
+                                                        onChange={(e) => setEditComment(e.target.value)}
+                                                    />
+                                                    <br />
+                                                    <button className="edit-btn" onClick={modifyComment}>
+                                                        Valider la modification
+                                                    </button>
+                                                </div>
                                             )}
                                         </div>
-                                        <div className="post-comments-header">
-                                            <Link to={`/profil/${comment.User.id}`}>
-                                                Posté par {comment.User.pseudo}
-                                            </Link>
-                                        </div>
-                                        <div className="post-comments-date">
-                                           le {new Date(comment.createdAt).toLocaleDateString("fr-FR")}
-                                        </div>
-                                    </div>
-                                    <div className="post-comments-content">
-                                        {updateComment === false && <p>{comment.content}</p>}
-                                        {updateComment && (
-                                            <div className="comment-edit-content">
-                                                <input 
-                                                    type="textarea" 
-                                                    defaultValue={comment.content}
-                                                    onChange={(e) => setEditComment(e.target.value)}
+                                        {(comment.userId === userId || isAdmin) && (
+                                            <div className="post-comments-options">
+                                                <BorderColorIcon 
+                                                    id="modify-btn"
+                                                    onClick={() => setUpdateComment(!updateComment)}
                                                 />
-                                                <br />
-                                                <button className="edit-btn" onClick={modifyComment}>
-                                                    Valider la modification
-                                                </button>
+                                                <DeleteIcon 
+                                                    id="delete-btn" 
+                                                    onClick={deleteComment} 
+                                                />
                                             </div>
                                         )}
                                     </div>
-                                    {(comment.userId === userId || isAdmin) && (
-                                        <div className="post-comments-options">
-                                            <BorderColorIcon 
-                                                id="modify-btn"
-                                                onClick={() => setUpdateComment(!updateComment)}
-                                            />
-                                            <DeleteIcon 
-                                                id="delete-btn" 
-                                                onClick={deleteComment} 
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            )
+                                )
                             }
                         })}
                     </div>

@@ -3,13 +3,10 @@ import {NavLink} from "react-router-dom";
 import {Link} from "react-router-dom";
 import Logo from "../../img/icon-left-font-monochrome-white.png";
 import "../Navbar/Navbar.css";
-import jwt_decode from "jwt-decode";
 
 function Navbar() {
     const [token, setToken] = useState(true);
-  /*  const token = localStorage.getItem("Token");
-    const decoded = jwt_decode(token);
-    const user = decoded["userId"];*/
+
     const user = localStorage.getItem("userId");
     
     useEffect(() => {
