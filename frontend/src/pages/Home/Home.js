@@ -141,7 +141,8 @@ function Home() {
                         },
                     })
                     .then((res) => {
-                        window.location.reload();
+                       // window.location.reload();
+                        window.location.href = "/home";
                     })
                     .catch((error) => console.log(error));
                 };
